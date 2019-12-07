@@ -2,6 +2,12 @@ package com.revolut.moneytransfer.sparkapp;
 
 import java.util.Objects;
 
+import org.eclipse.jetty.http.HttpStatus;
+
+import com.revolut.moneytransfer.exception.InvalidRequestException;
+import com.revolut.moneytransfer.excpetionadvice.ExceptionAdvice;
+import com.revolut.moneytransfer.models.ExceptionModel;
+
 /**
  * @author AQIB JAVED
  * @version 1.0
@@ -20,6 +26,14 @@ public class SparkApp {
 
 	}
 
+	public SparkApp setupExceptions() {
+		ExceptionAdvice.getInstance().exceptionAdvice(ExceptionModel.builder()
+				.withException(InvalidRequestException.class).withStatus(HttpStatus.BAD_REQUEST_400).build());
+
+		return this;
+	}
+
+	// Double check locking singleton pattern
 	public static SparkApp getInstance() {
 		if (Objects.isNull(sparkApp)) {
 			synchronized (SparkApp.class) {
