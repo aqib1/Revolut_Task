@@ -5,8 +5,9 @@ import java.util.Objects;
 import org.eclipse.jetty.http.HttpStatus;
 
 import com.revolut.moneytransfer.exception.InvalidRequestException;
+import com.revolut.moneytransfer.exception.InvalidResponseException;
 import com.revolut.moneytransfer.excpetionadvice.ExceptionAdvice;
-import com.revolut.moneytransfer.models.ExceptionModel;
+import com.revolut.moneytransfer.utils.ExceptionUtility;
 
 /**
  * @author AQIB JAVED
@@ -26,10 +27,20 @@ public class SparkApp {
 
 	}
 
+	/**
+	 * Registration of exceptions in spark-Application
+	 * 
+	 * @see {@link InvalidRequestException}
+	 * @see {@link InvalidResponseException}
+	 */
 	public SparkApp setupExceptions() {
-		ExceptionAdvice.getInstance().exceptionAdvice(ExceptionModel.builder()
+		// Creating advice for InvalidRequestException
+		ExceptionAdvice.getInstance().exceptionAdvice(ExceptionUtility.builder()
 				.withException(InvalidRequestException.class).withStatus(HttpStatus.BAD_REQUEST_400).build());
-
+		// Creating advice for InvalidResponseException
+		ExceptionAdvice.getInstance().exceptionAdvice(ExceptionUtility.builder()
+				.withException(InvalidResponseException.class).withStatus(HttpStatus.BAD_REQUEST_400).build());
+		
 		return this;
 	}
 

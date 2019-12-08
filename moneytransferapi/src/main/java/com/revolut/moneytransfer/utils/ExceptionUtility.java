@@ -1,4 +1,4 @@
-package com.revolut.moneytransfer.models;
+package com.revolut.moneytransfer.utils;
 
 import java.util.Objects;
 import lombok.Getter;
@@ -11,12 +11,12 @@ import lombok.ToString;
  */
 @Getter
 @ToString
-public class ExceptionModel {
+public class ExceptionUtility {
 
 	private Class<? extends Exception> exception;
 	private int status;
 
-	private ExceptionModel(Class<? extends Exception> exception, int status) {
+	private ExceptionUtility(Class<? extends Exception> exception, int status) {
 		this.exception = exception;
 		this.status = status;
 	}
@@ -49,12 +49,12 @@ public class ExceptionModel {
 			return this;
 		}
 
-		public ExceptionModel build() {
+		public ExceptionUtility build() {
 			// Primary details [exception, status] cannot be null
 			if (Objects.isNull(exception) || Objects.isNull(status)) {
 				throw new IllegalArgumentException("IllegalArguments provided for ExceptionModel attribute");
 			}
-			return new ExceptionModel(exception, status);
+			return new ExceptionUtility(exception, status);
 		}
 
 		// Double check locking singleton pattern

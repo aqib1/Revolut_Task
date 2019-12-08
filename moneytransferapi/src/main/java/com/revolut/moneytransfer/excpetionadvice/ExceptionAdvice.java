@@ -5,7 +5,7 @@ import static spark.Spark.exception;
 import java.util.Objects;
 
 import com.google.gson.Gson;
-import com.revolut.moneytransfer.models.ExceptionModel;
+import com.revolut.moneytransfer.utils.ExceptionUtility;
 
 /**
  * @author AQIB JAVED
@@ -27,7 +27,7 @@ public class ExceptionAdvice {
 
 	}
 
-	public ExceptionAdvice exceptionAdvice(final ExceptionModel exceptionModel) {
+	public ExceptionAdvice exceptionAdvice(final ExceptionUtility exceptionModel) {
 		exception(exceptionModel.getException(), (exception, request, response) -> {
 			response.status(exceptionModel.getStatus());
 			response.body(new Gson().toJson(null));
