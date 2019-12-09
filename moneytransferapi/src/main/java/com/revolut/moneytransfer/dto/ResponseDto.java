@@ -4,6 +4,17 @@ import java.util.Objects;
 
 import com.revolut.moneytransfer.dto.status.StatusType;
 
+import lombok.Getter;
+
+/**
+ * @author AQIB JAVED
+ * @version 1.0
+ * @since 12/9/2019
+ *        <p>
+ *        Generic response data transfer object
+ *        </p>
+ */
+@Getter
 public class ResponseDto {
 
 	private StatusType statusType;
@@ -12,10 +23,6 @@ public class ResponseDto {
 		this.statusType = statusType;
 	}
 
-	public StatusType getStatusType() {
-		return statusType;
-	}
-	
 	public static Builder builder() {
 		return Builder.getInstance();
 	}
