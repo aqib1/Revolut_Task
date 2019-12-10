@@ -16,25 +16,22 @@ public class ExceptionUtility {
 	private Class<? extends Exception> exception;
 	private int status;
 
-	private ExceptionUtility(Class<? extends Exception> exception, int status) {
-		this.exception = exception;
-		this.status = status;
+	private ExceptionUtility(final Builder builder) {
+		this.exception = builder.exception;
+		this.status = builder.status;
 	}
 
 	public static Builder builder() {
-		return Builder.getInstance();
+		return new Builder();
 	}
 
 	/**
 	 * Builder pattern for ExceptionModel
 	 */
+	@ToString
 	public static class Builder {
 		private Class<? extends Exception> exception;
 		private int status;
-		// we will make object volatile so that in the case of multiple threads,
-		// each thread have have updated object value, from main memory
-		private volatile static Builder builder = null;
-
 		private Builder() {
 
 		}
@@ -54,18 +51,7 @@ public class ExceptionUtility {
 			if (Objects.isNull(exception) || Objects.isNull(status)) {
 				throw new IllegalArgumentException("IllegalArguments provided for ExceptionModel attribute");
 			}
-			return new ExceptionUtility(exception, status);
-		}
-
-		// Double check locking singleton pattern
-		private static Builder getInstance() {
-			if (Objects.isNull(builder)) {
-				synchronized (Builder.class) {
-					if (Objects.isNull(builder))
-						builder = new Builder();
-				}
-			}
-			return builder;
+			return new ExceptionUtility(this);
 		}
 	}
 }

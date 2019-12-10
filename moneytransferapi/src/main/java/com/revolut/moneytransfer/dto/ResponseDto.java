@@ -1,10 +1,9 @@
 package com.revolut.moneytransfer.dto;
 
-import java.util.Objects;
-
 import com.revolut.moneytransfer.dto.status.StatusType;
 
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * @author AQIB JAVED
@@ -15,28 +14,26 @@ import lombok.Getter;
  *        </p>
  */
 @Getter
+@ToString
 public class ResponseDto {
 
 	private StatusType statusType;
 
-	private ResponseDto(StatusType statusType) {
-		this.statusType = statusType;
+	private ResponseDto(final Builder builder) {
+		this.statusType = builder.statusType;
 	}
 
 	public static Builder builder() {
-		return Builder.getInstance();
+		return new Builder();
 	}
 
 	/**
 	 * Builder pattern for Response DTO class
 	 * 
 	 */
+	@ToString
 	public static class Builder {
 		private StatusType statusType;
-		// we will make object volatile so that in the case of multiple threads,
-		// each thread have have updated object value, from main memory
-		private volatile static Builder builder = null;
-
 		private Builder() {
 
 		}
@@ -47,18 +44,8 @@ public class ResponseDto {
 		}
 
 		public ResponseDto build() {
-			return new ResponseDto(this.statusType);
+			return new ResponseDto(this);
 		}
 
-		// Double check locking singleton pattern
-		private static Builder getInstance() {
-			if (Objects.isNull(builder)) {
-				synchronized (Builder.class) {
-					if (Objects.isNull(builder))
-						builder = new Builder();
-				}
-			}
-			return builder;
-		}
 	}
 }

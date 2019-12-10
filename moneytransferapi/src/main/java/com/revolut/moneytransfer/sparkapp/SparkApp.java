@@ -42,11 +42,15 @@ public class SparkApp {
 	 */
 	public SparkApp registerExceptions() {
 		// Creating advice for InvalidRequestException
-		ExceptionAdvice.getInstance().exceptionAdvice(ExceptionUtility.builder()
-				.withException(InvalidRequestException.class).withStatus(HttpStatus.BAD_REQUEST_400).build());
-		// Creating advice for InvalidResponseException
-		ExceptionAdvice.getInstance().exceptionAdvice(ExceptionUtility.builder()
-				.withException(InvalidResponseException.class).withStatus(HttpStatus.BAD_REQUEST_400).build());
+		ExceptionAdvice.getInstance()
+				.exceptionAdvice(ExceptionUtility.builder().withException(InvalidRequestException.class)
+						.withStatus(HttpStatus.BAD_REQUEST_400).build())
+				// Creating advice for InvalidResponseException
+				.exceptionAdvice(ExceptionUtility.builder().withException(InvalidResponseException.class)
+						.withStatus(HttpStatus.BAD_REQUEST_400).build())
+				// Creating advice for IllegalArgumentException
+				.exceptionAdvice(ExceptionUtility.builder().withException(IllegalArgumentException.class)
+						.withStatus(HttpStatus.EXPECTATION_FAILED_417).build());
 
 		return this;
 	}
