@@ -33,6 +33,7 @@ public class ExceptionUtility {
 	public static class Builder {
 		private Class<? extends Exception> exception;
 		private int status;
+
 		private Builder() {
 
 		}

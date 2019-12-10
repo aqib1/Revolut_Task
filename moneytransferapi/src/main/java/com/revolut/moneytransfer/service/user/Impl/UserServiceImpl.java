@@ -9,21 +9,52 @@ import com.revolut.moneytransfer.models.UserModel;
 import com.revolut.moneytransfer.service.user.UserService;
 import com.revolut.moneytransfer.utils.Helper;
 
+/**
+ * <p>
+ * User service implementation
+ * </p>
+ * 
+ * @author AQIB JAVED
+ * @version 1.0
+ * @since 12/9/2019
+ * 
+ */
 public class UserServiceImpl implements UserService {
 
 	private UserDao userDao;
 
+	/**
+	 * <p>
+	 * User DAO injection using dagger2
+	 * </p>
+	 * 
+	 * @param userDao
+	 */
 	@Inject
 	public UserServiceImpl(UserDao userDao) {
 		this.userDao = userDao;
 	}
 
+	/**
+	 * <p>
+	 * Get all users
+	 * </p>
+	 * 
+	 * @return {@link List<UserModel>}
+	 */
 	@Override
 	public List<UserModel> getAll() {
 		return userDao.getAll();
 	}
 
-	//Get user by its id
+	/**
+	 * <p>
+	 * Get user by its id
+	 * </p>
+	 * 
+	 * @Param id
+	 * @return {@link UserModel}
+	 */
 	@Override
 	public UserModel getById(String id) throws IllegalArgumentException {
 		if (Helper.isNullOrEmptyString(id)) {
@@ -32,6 +63,14 @@ public class UserServiceImpl implements UserService {
 		return userDao.getById(id);
 	}
 
+	/**
+	 * <p>
+	 * create method will create and send the newly created user
+	 * </p>
+	 * 
+	 * @param user
+	 * @return {@link UserModel}
+	 */
 	@Override
 	public UserModel create(UserModel user) {
 		return userDao.create(user);

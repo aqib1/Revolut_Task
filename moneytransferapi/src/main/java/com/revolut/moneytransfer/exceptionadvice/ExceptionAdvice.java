@@ -8,14 +8,14 @@ import com.google.gson.Gson;
 import com.revolut.moneytransfer.utils.ExceptionUtility;
 
 /**
+ * <p>
+ * This class is work like exception advice. We will register our exceptions and
+ * corresponding responses on those exception in spark-java framework
+ * </p>
+ * 
  * @author AQIB JAVED
  * @version 1.0
  * @since 12/7/2019
- *        <p>
- *        This class is work like exception advice. We will register our
- *        exceptions and corresponding responses on those exception in
- *        spark-java framework
- *        </p>
  */
 public class ExceptionAdvice {
 	// we will make object volatile so that in the case of multiple threads,
@@ -26,6 +26,10 @@ public class ExceptionAdvice {
 
 	}
 
+	/**
+	 * @param exceptionModel
+	 * @return
+	 */
 	public ExceptionAdvice exceptionAdvice(final ExceptionUtility exceptionModel) {
 		exception(exceptionModel.getException(), (exception, request, response) -> {
 			response.status(exceptionModel.getStatus());

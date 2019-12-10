@@ -5,12 +5,13 @@ import java.util.List;
 import com.revolut.moneytransfer.models.UserModel;
 
 /**
+ * <p>
+ * User-service skeleton
+ * </p>
+ * 
  * @author AQIB JAVED
  * @version 1.0
  * @since 12/10/2019
- *        <p>
- *        User-service skeleton
- *        </p>
  */
 public interface UserService {
 

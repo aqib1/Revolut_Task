@@ -18,10 +18,17 @@ public class InvalidResponseException extends RuntimeException {
 
 	}
 
+	/**
+	 * @param message
+	 */
 	public InvalidResponseException(String message) {
 		super(message);
 	}
 
+	/**
+	 * @param message
+	 * @param throwable
+	 */
 	public InvalidResponseException(String message, Throwable throwable) {
 		super(message, throwable);
 	}

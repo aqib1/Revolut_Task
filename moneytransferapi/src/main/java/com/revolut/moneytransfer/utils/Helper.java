@@ -3,12 +3,14 @@ package com.revolut.moneytransfer.utils;
 import java.util.Objects;
 
 /**
+ * <p>
+ * Helper class for project
+ * </p>
+ * 
  * @author AQIB JAVED
  * @version 1.0
  * @since 12/7/2019
- *        <p>
- *        Helper class for project
- *        </p>
+ * 
  */
 public class Helper {
 

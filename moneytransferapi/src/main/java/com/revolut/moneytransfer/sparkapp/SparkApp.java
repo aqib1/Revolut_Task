@@ -14,13 +14,14 @@ import com.revolut.moneytransfer.exceptionadvice.ExceptionAdvice;
 import com.revolut.moneytransfer.utils.ExceptionUtility;
 
 /**
+ * <p>
+ * This class is used to initialize spark-java application against all
+ * controller and exceptions
+ * </p>
+ * 
  * @author AQIB JAVED
  * @version 1.0
  * @since 12/7/2019
- *        <p>
- *        This class is used to initialize spark-java application against all
- *        controller and exceptions
- *        </p>
  */
 public class SparkApp {
 	// we will make object volatile so that in the case of multiple threads,
@@ -66,15 +67,16 @@ public class SparkApp {
 	public SparkApp registerControllers() {
 		// User controller API registrations
 		UserController.getInstance().registerGetAllUserAPI();
+		UserController.getInstance().registerGetUserbByIdAPI();
 		return this;
 	}
 
 	/**
 	 * <p>
 	 * Setting response type passed during the run of Spark application<br>
+	 * responsetType is effective final variable {see java-8 doc}
+	 * </p>
 	 * 
-	 * @param responsetType is effective final variable {see java-8 doc}
-	 *                      </p>
 	 * @param responsetType
 	 * @return {@link SparkApp}
 	 */

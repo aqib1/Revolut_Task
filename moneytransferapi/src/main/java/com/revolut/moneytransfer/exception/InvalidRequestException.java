@@ -18,10 +18,17 @@ public class InvalidRequestException extends RuntimeException {
 
 	}
 
+	/**
+	 * @param message
+	 */
 	public InvalidRequestException(String message) {
 		super(message);
 	}
 
+	/**
+	 * @param message
+	 * @param throwable
+	 */
 	public InvalidRequestException(String message, Throwable throwable) {
 		super(message, throwable);
 	}

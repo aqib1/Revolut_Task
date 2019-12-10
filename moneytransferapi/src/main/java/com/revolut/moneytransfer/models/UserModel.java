@@ -5,6 +5,16 @@ import java.util.Objects;
 import lombok.Getter;
 import lombok.ToString;
 
+/**
+ * <p>
+ * Model for user details
+ * </p>
+ * 
+ * @author AQIB JAVED
+ * @version 1.0
+ * @since 12/9/2019
+ *
+ */
 @Getter
 @ToString
 public class UserModel {
@@ -24,6 +34,10 @@ public class UserModel {
 		this.CNIC = builder.CNIC;
 		this.address = builder.address;
 		this.contactNumber = builder.contactNumber;
+	}
+
+	public static Builder builder() {
+		return new Builder();
 	}
 
 	/**
@@ -102,7 +116,7 @@ public class UserModel {
 			this.contactNumber = contactNumber;
 			return this;
 		}
-		
+
 		public UserModel build() {
 			return new UserModel(this);
 		}

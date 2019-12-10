@@ -1,11 +1,17 @@
 package com.revolut.moneytransfer.dao.user.Impl;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import com.revolut.moneytransfer.dao.user.UserDao;
 import com.revolut.moneytransfer.models.UserModel;
 
+/**
+ * @author AQIB JAVED
+ * @version 1.0
+ * @since 12/10/2019
+ */
 public class UserDaoImpl implements UserDao {
 	private static UserDaoImpl userDaoImpl = null;
 
@@ -15,12 +21,12 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public List<UserModel> getAll() {
-		return null;
+		return Arrays.asList(UserModel.builder().withCNIC("1234").build());
 	}
 
 	@Override
 	public UserModel getById(String id) {
-		return null;
+		return UserModel.builder().withCNIC("1234").build();
 	}
 
 	@Override
