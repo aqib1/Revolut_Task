@@ -1,4 +1,4 @@
-package com.revolut.moneytransfer.excpetionadvice;
+package com.revolut.moneytransfer.exceptionadvice;
 
 import static spark.Spark.exception;
 
@@ -11,7 +11,6 @@ import com.revolut.moneytransfer.utils.ExceptionUtility;
  * @author AQIB JAVED
  * @version 1.0
  * @since 12/7/2019
- * 
  *        <p>
  *        This class is work like exception advice. We will register our
  *        exceptions and corresponding responses on those exception in

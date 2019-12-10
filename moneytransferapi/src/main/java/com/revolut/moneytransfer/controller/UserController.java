@@ -6,6 +6,8 @@ import static spark.Spark.get;
 import java.util.Objects;
 
 import com.google.gson.Gson;
+import com.revolut.moneytransfer.dagger2.components.DaggerUserServiceComponent;
+import com.revolut.moneytransfer.dagger2.components.UserServiceComponent;
 import com.revolut.moneytransfer.dto.ResponseDto;
 import com.revolut.moneytransfer.dto.status.StatusType;
 
@@ -18,8 +20,9 @@ import com.revolut.moneytransfer.dto.status.StatusType;
  *          </p>
  */
 public class UserController {
+	private UserServiceComponent userServiceComponent = DaggerUserServiceComponent.create();
 	private static UserController userController = null;
-
+	
 	private UserController() {
 
 	}

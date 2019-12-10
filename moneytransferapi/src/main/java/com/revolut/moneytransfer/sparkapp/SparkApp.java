@@ -10,7 +10,7 @@ import org.eclipse.jetty.http.HttpStatus;
 import com.revolut.moneytransfer.controller.UserController;
 import com.revolut.moneytransfer.exception.InvalidRequestException;
 import com.revolut.moneytransfer.exception.InvalidResponseException;
-import com.revolut.moneytransfer.excpetionadvice.ExceptionAdvice;
+import com.revolut.moneytransfer.exceptionadvice.ExceptionAdvice;
 import com.revolut.moneytransfer.utils.ExceptionUtility;
 
 /**
