@@ -22,7 +22,7 @@ import dagger.Provides;
  */
 @Module
 public class UserServiceModule {
-
+	
 	/**
 	 * @return {@link UserDaoImpl}
 	 */

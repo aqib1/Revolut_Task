@@ -87,7 +87,6 @@
 					<mainClass>MoneyTransfer</mainClass>
 				</configuration>
 			</plugin>
-
 		</plugins>
 	</build>
 </project>

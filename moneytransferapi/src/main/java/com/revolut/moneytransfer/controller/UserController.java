@@ -1,8 +1,10 @@
 package com.revolut.moneytransfer.controller;
 
+import static com.revolut.moneytransfer.utils.Helper.DELETE_USER_BY_ID;
 import static com.revolut.moneytransfer.utils.Helper.GET_USERS;
 import static com.revolut.moneytransfer.utils.Helper.GET_USER_BY_ID;
 import static com.revolut.moneytransfer.utils.Helper.POST_USER_CREATE;
+import static spark.Spark.delete;
 import static spark.Spark.get;
 import static spark.Spark.post;
 
@@ -15,6 +17,7 @@ import com.revolut.moneytransfer.dto.RequestDto;
 import com.revolut.moneytransfer.dto.ResponseDto;
 import com.revolut.moneytransfer.dto.status.StatusType;
 import com.revolut.moneytransfer.service.user.UserService;
+import com.revolut.moneytransfer.utils.Helper;
 
 /**
  * <p>
@@ -61,18 +64,30 @@ public class UserController {
 	 */
 	public UserController registerGetUserbByIdAPI() {
 		get(GET_USER_BY_ID, (request, response) -> {
-			String id = request.params(":id");
-			return new Gson().toJson(ResponseDto.builder().withStatusType(StatusType.SUCCESS)
-					.withMessage("User detailed recieved successfully against id [%s]", id)
-					.withData(new Gson().toJsonTree(userService.getById(id))));
+			return Helper.getJson(userService.getById(request.params(":id")));
 		});
 		return this;
 	}
 
-	public UserController registerCreateUser() {
+	/**
+	 * <p>
+	 * This method is used to delete user against given id
+	 * </p>
+	 * 
+	 * @return {@link UserController}
+	 */
+	public UserController registerPostCreateUser() {
 		post(POST_USER_CREATE, (request, response) -> {
-			return userService.create(new Gson().fromJson(request.body(), RequestDto.class));
+			return Helper.getJson(userService.create(new Gson().fromJson(request.body(), RequestDto.class)));
 		});
+		return this;
+	}
+
+	public UserController registerDeleteUser() {
+		delete(DELETE_USER_BY_ID, (request, response) -> {
+			return Helper.getJson(userService.delete(request.params(":id")));
+		});
+
 		return this;
 	}
 

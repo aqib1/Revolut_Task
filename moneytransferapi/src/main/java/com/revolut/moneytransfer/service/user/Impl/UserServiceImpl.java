@@ -59,11 +59,13 @@ public class UserServiceImpl implements UserService {
 	 * @return {@link UserModel}
 	 */
 	@Override
-	public UserModel getById(String id) throws IllegalArgumentException {
+	public ResponseDto getById(String id) throws IllegalArgumentException {
 		if (Helper.isNullOrEmptyString(id)) {
 			throw new IllegalArgumentException("User id can't be null or empty");
 		}
-		return userDao.getById(id);
+		UserModel model = userDao.getById(id);
+		return ResponseDto.builder().withStatusType(StatusType.SUCCESS)
+				.withMessage("User [%s] deleted successfully", model).withData(model).build();
 	}
 
 	/**
@@ -71,20 +73,22 @@ public class UserServiceImpl implements UserService {
 	 * create method will create and send the newly created user
 	 * </p>
 	 * 
-	 * @param user
+	 * @param request
 	 * @return {@link UserModel}
 	 */
 	@Override
-	public ResponseDto create(RequestDto user) {
-		Helper.validateUserForCreation(user);
-		userDao.create(user.getUser());
+	public ResponseDto create(RequestDto request) {
+		Helper.validateUserForCreation(request);
+		UserModel user = userDao.create(request.getUser());
 		return ResponseDto.builder().withStatusType(StatusType.SUCCESS)
-				.withMessage("User [%s] created successfully", user.getUser()).build();
+				.withMessage("User [%s] created successfully", user).withData(user).build();
 	}
 
 	@Override
-	public UserModel update(UserModel user) {
-		return userDao.update(user);
+	public ResponseDto update(RequestDto request) {
+		Helper.validateUserForUpdation(request);
+		return ResponseDto.builder().withStatusType(StatusType.SUCCESS)
+				.withMessage("User [%s] updated successfully", userDao.update(request.getUser())).build();
 	}
 
 	@Override
@@ -94,8 +98,12 @@ public class UserServiceImpl implements UserService {
 
 	// Delete user by id, return deleted User
 	@Override
-	public UserModel delete(String id) {
-		return userDao.delete(id);
+	public ResponseDto delete(String id) {
+		if (Helper.isNullOrEmptyString(id)) {
+			throw new IllegalArgumentException("User id can't be null or empty");
+		}
+		return ResponseDto.builder().withStatusType(StatusType.SUCCESS)
+				.withMessage("User [%s] deleted successfully", userDao.delete(id)).build();
 	}
 
 }

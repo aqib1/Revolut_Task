@@ -8,6 +8,7 @@ import java.util.Objects;
 import org.eclipse.jetty.http.HttpStatus;
 
 import com.revolut.moneytransfer.controller.UserController;
+import com.revolut.moneytransfer.exception.BadRequestParamsException;
 import com.revolut.moneytransfer.exception.InvalidRequestException;
 import com.revolut.moneytransfer.exception.InvalidResponseException;
 import com.revolut.moneytransfer.exceptionadvice.ExceptionAdvice;
@@ -54,6 +55,9 @@ public class SparkApp {
 						.withStatus(HttpStatus.EXPECTATION_FAILED_417).build())
 				// Creating advice for NullPointerException
 				.exceptionAdvice(ExceptionUtility.builder().withException(NullPointerException.class)
+						.withStatus(HttpStatus.EXPECTATION_FAILED_417).build())
+				// Creating advice for BadRequestException
+				.exceptionAdvice(ExceptionUtility.builder().withException(BadRequestParamsException.class)
 						.withStatus(HttpStatus.EXPECTATION_FAILED_417).build());
 		return this;
 	}
@@ -70,7 +74,7 @@ public class SparkApp {
 		// User controller API registrations
 		UserController.getInstance().registerGetAllUserAPI();
 		UserController.getInstance().registerGetUserbByIdAPI();
-		UserController.getInstance().registerCreateUser();
+		UserController.getInstance().registerPostCreateUser();
 		return this;
 	}
 

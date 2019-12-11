@@ -2,6 +2,7 @@ package com.revolut.moneytransfer.dto;
 
 import com.google.gson.JsonElement;
 import com.revolut.moneytransfer.dto.status.StatusType;
+import com.revolut.moneytransfer.utils.Helper;
 
 import lombok.Getter;
 import lombok.ToString;
@@ -66,8 +67,8 @@ public class ResponseDto {
 		 * @param data
 		 * @return
 		 */
-		public Builder withData(JsonElement data) {
-			this.data = data;
+		public Builder withData(Object data) {
+			this.data = Helper.GSON.toJsonTree(data);
 			return this;
 		}
 

@@ -18,6 +18,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public class UserModel {
+
 	private String id;
 	private String firstName;
 	private String lastName;

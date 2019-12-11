@@ -21,17 +21,17 @@ public interface UserService {
 	List<UserModel> getAll();
 
 	// Get user by id from DB
-	UserModel getById(String id) throws IllegalArgumentException;
+	ResponseDto getById(String id) throws IllegalArgumentException;
 
 	// Create new user and returned newly created user
-	ResponseDto create(RequestDto user);
+	ResponseDto create(RequestDto request);
 
 	// Update user and return updated user
-	UserModel update(UserModel user);
+	ResponseDto update(RequestDto request);
 
 	// Check is user exists by id
 	boolean exists(String id);
 
 	// Delete user by id
-	UserModel delete(String id);
+	ResponseDto delete(String id);
 }
