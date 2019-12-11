@@ -5,6 +5,8 @@ import static spark.Spark.exception;
 import java.util.Objects;
 
 import com.google.gson.Gson;
+import com.revolut.moneytransfer.dto.ResponseDto;
+import com.revolut.moneytransfer.dto.status.StatusType;
 import com.revolut.moneytransfer.utils.ExceptionUtility;
 
 /**
@@ -33,7 +35,8 @@ public class ExceptionAdvice {
 	public ExceptionAdvice exceptionAdvice(final ExceptionUtility exceptionModel) {
 		exception(exceptionModel.getException(), (exception, request, response) -> {
 			response.status(exceptionModel.getStatus());
-			response.body(new Gson().toJson(null));
+			response.body(new Gson().toJson(
+					ResponseDto.builder().withStatusType(StatusType.ERROR).withMessage(exception.getMessage())));
 		});
 		return this;
 	}

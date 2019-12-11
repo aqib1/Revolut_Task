@@ -2,6 +2,8 @@ package com.revolut.moneytransfer.service.user;
 
 import java.util.List;
 
+import com.revolut.moneytransfer.dto.RequestDto;
+import com.revolut.moneytransfer.dto.ResponseDto;
 import com.revolut.moneytransfer.models.UserModel;
 
 /**
@@ -22,7 +24,7 @@ public interface UserService {
 	UserModel getById(String id) throws IllegalArgumentException;
 
 	// Create new user and returned newly created user
-	UserModel create(UserModel user);
+	ResponseDto create(RequestDto user);
 
 	// Update user and return updated user
 	UserModel update(UserModel user);

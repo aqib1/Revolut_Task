@@ -2,13 +2,16 @@ package com.revolut.moneytransfer.controller;
 
 import static com.revolut.moneytransfer.utils.Helper.GET_USERS;
 import static com.revolut.moneytransfer.utils.Helper.GET_USER_BY_ID;
+import static com.revolut.moneytransfer.utils.Helper.POST_USER_CREATE;
 import static spark.Spark.get;
+import static spark.Spark.post;
 
 import java.util.Objects;
 
 import com.google.gson.Gson;
 import com.revolut.moneytransfer.dagger2.components.DaggerUserServiceComponent;
 import com.revolut.moneytransfer.dagger2.components.UserServiceComponent;
+import com.revolut.moneytransfer.dto.RequestDto;
 import com.revolut.moneytransfer.dto.ResponseDto;
 import com.revolut.moneytransfer.dto.status.StatusType;
 import com.revolut.moneytransfer.service.user.UserService;
@@ -26,7 +29,7 @@ public class UserController {
 	// Getting dagger2 component for user service
 	private UserServiceComponent userServiceComponent = DaggerUserServiceComponent.create();
 	// Getting service from component
-	private UserService userServer = userServiceComponent.buildUserServiceImpl();
+	private UserService userService = userServiceComponent.buildUserServiceImpl();
 	private static UserController userController = null;
 
 	private UserController() {
@@ -35,7 +38,7 @@ public class UserController {
 
 	/**
 	 * <p>
-	 * This method is used to register get all-user api
+	 * This method is used to register get all-user API
 	 * </p>
 	 * 
 	 * @return {@link UserController}
@@ -44,17 +47,31 @@ public class UserController {
 		get(GET_USERS, (request, response) -> {
 			return new Gson().toJson(ResponseDto.builder().withStatusType(StatusType.SUCCESS)
 					.withMessage("User detailed recieved successfully")
-					.withData(new Gson().toJsonTree(userServer.getAll())).build());
+					.withData(new Gson().toJsonTree(userService.getAll())).build());
 		});
 		return this;
 	}
 
+	/**
+	 * <p>
+	 * This method is used to register get user by id API
+	 * </p>
+	 * 
+	 * @return {@link UserController}
+	 */
 	public UserController registerGetUserbByIdAPI() {
 		get(GET_USER_BY_ID, (request, response) -> {
 			String id = request.params(":id");
 			return new Gson().toJson(ResponseDto.builder().withStatusType(StatusType.SUCCESS)
 					.withMessage("User detailed recieved successfully against id [%s]", id)
-					.withData(new Gson().toJsonTree(userServer.getById(id))));
+					.withData(new Gson().toJsonTree(userService.getById(id))));
+		});
+		return this;
+	}
+
+	public UserController registerCreateUser() {
+		post(POST_USER_CREATE, (request, response) -> {
+			return userService.create(new Gson().fromJson(request.body(), RequestDto.class));
 		});
 		return this;
 	}

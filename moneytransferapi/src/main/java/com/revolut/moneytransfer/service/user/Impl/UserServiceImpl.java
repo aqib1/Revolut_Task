@@ -5,6 +5,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.revolut.moneytransfer.dao.user.UserDao;
+import com.revolut.moneytransfer.dto.RequestDto;
+import com.revolut.moneytransfer.dto.ResponseDto;
+import com.revolut.moneytransfer.dto.status.StatusType;
 import com.revolut.moneytransfer.models.UserModel;
 import com.revolut.moneytransfer.service.user.UserService;
 import com.revolut.moneytransfer.utils.Helper;
@@ -72,8 +75,11 @@ public class UserServiceImpl implements UserService {
 	 * @return {@link UserModel}
 	 */
 	@Override
-	public UserModel create(UserModel user) {
-		return userDao.create(user);
+	public ResponseDto create(RequestDto user) {
+		Helper.validateUserForCreation(user);
+		userDao.create(user.getUser());
+		return ResponseDto.builder().withStatusType(StatusType.SUCCESS)
+				.withMessage("User [%s] created successfully", user.getUser()).build();
 	}
 
 	@Override

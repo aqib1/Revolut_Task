@@ -51,8 +51,10 @@ public class SparkApp {
 						.withStatus(HttpStatus.BAD_REQUEST_400).build())
 				// Creating advice for IllegalArgumentException
 				.exceptionAdvice(ExceptionUtility.builder().withException(IllegalArgumentException.class)
+						.withStatus(HttpStatus.EXPECTATION_FAILED_417).build())
+				// Creating advice for NullPointerException
+				.exceptionAdvice(ExceptionUtility.builder().withException(NullPointerException.class)
 						.withStatus(HttpStatus.EXPECTATION_FAILED_417).build());
-
 		return this;
 	}
 
@@ -68,6 +70,7 @@ public class SparkApp {
 		// User controller API registrations
 		UserController.getInstance().registerGetAllUserAPI();
 		UserController.getInstance().registerGetUserbByIdAPI();
+		UserController.getInstance().registerCreateUser();
 		return this;
 	}
 
