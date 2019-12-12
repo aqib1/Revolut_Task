@@ -8,9 +8,9 @@ import static com.revolut.moneytransfer.utils.Helper.POST_USER_CREATE;
 import static com.revolut.moneytransfer.utils.Helper.PUT_USER_UPDATE;
 import static spark.Spark.delete;
 import static spark.Spark.get;
+import static spark.Spark.options;
 import static spark.Spark.post;
 import static spark.Spark.put;
-import static spark.Spark.options;
 
 import java.util.Objects;
 

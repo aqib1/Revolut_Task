@@ -1,4 +1,4 @@
-package com.revolut.moneytransfer.service;
+package com.revolut.moneytransfer.service.account;
 
 import com.revolut.moneytransfer.dto.AccountRequestDto;
 import com.revolut.moneytransfer.dto.ResponseDto;

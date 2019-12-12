@@ -3,7 +3,6 @@ package com.revolut.moneytransfer.dao.user.Impl;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.StampedLock;
 
 import com.revolut.moneytransfer.dao.user.UserDao;
@@ -44,15 +43,9 @@ import com.revolut.moneytransfer.utils.data.DataUtils;
  * then check result with validate method. </strong> <br>
  * Java 1.8 StampedLock is much more efficient and fast as compared to
  * ReentrantLock specially optimistic locking which make synchronization
- * overhead very slow
- * 
- * @see {@link StampedLock#tryOptimisticRead()} for more details <br>
- *      </p>
- * 
- *      <p>
- *      If above seems complex and you don't like optimistic locking you can use
- *      java 1.7 ReentrantLock @see {@link ReentrantLock}
- *      </p>
+ * overhead very slow. You can also use ReentrantLock but it very slow as
+ * compared to new java 1.8 stamped lock
+ * </p>
  * 
  * @author AQIB JAVED
  * @version 1.0
@@ -74,7 +67,7 @@ public class UserDaoImpl implements UserDao {
 	 * StampedLock
 	 * </p>
 	 * 
-	 * @return {@link List<UserModel>}
+	 * @return {@link Collection<UserModel>}
 	 */
 	@Override
 	public Collection<UserModel> getAll() {
@@ -87,7 +80,7 @@ public class UserDaoImpl implements UserDao {
 		// Only in the case when write lock is acquired we need to apply read lock
 		stamp = stampedLock.readLock();
 		try {
-			return userData.values();
+			return getAllUsers();
 		} finally {
 			stampedLock.unlockRead(stamp);
 		}

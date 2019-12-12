@@ -4,8 +4,8 @@ import javax.inject.Singleton;
 
 import com.revolut.moneytransfer.dao.account.AccountDao;
 import com.revolut.moneytransfer.dao.account.Impl.AccountDaoImpl;
-import com.revolut.moneytransfer.service.AccountService;
-import com.revolut.moneytransfer.service.user.Impl.AccountServiceImpl;
+import com.revolut.moneytransfer.service.account.AccountService;
+import com.revolut.moneytransfer.service.account.Impl.AccountServiceImpl;
 
 import dagger.Module;
 import dagger.Provides;

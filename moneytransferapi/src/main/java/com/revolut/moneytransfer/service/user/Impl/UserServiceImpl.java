@@ -49,7 +49,8 @@ public class UserServiceImpl implements UserService {
 	public ResponseDto getAll() {
 		Collection<UserModel> users = userDao.getAll();
 		return ResponseDto.builder().withStatusType(StatusType.SUCCESS)
-				.withMessage("Users recieved with length [%s]", users.size()).withData(users).build();
+				.withMessage("Users recieved with length [%s]", users.size()).withData(users)
+				.build();
 	}
 
 	/**
@@ -68,7 +69,8 @@ public class UserServiceImpl implements UserService {
 		}
 		UserModel model = userDao.getById(id);
 		return ResponseDto.builder().withStatusType(StatusType.SUCCESS)
-				.withMessage("User for ID [%s] found successfully", model.getId()).withData(model).build();
+				.withMessage("User for ID [%s] found successfully", model.getId()).withData(model)
+				.build();
 	}
 
 	/**
@@ -81,10 +83,11 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public ResponseDto create(UserRequestDto request) {
-		Helper.validateUserForCreation(request);
+		Helper.validateUser(request);
 		UserModel user = userDao.create(request.getUser());
 		return ResponseDto.builder().withStatusType(StatusType.SUCCESS)
-				.withMessage("User for ID [%s] created successfully", user.getId()).withData(user).build();
+				.withMessage("User for ID [%s] created successfully", user.getId()).withData(user)
+				.build();
 	}
 
 	/**
@@ -97,10 +100,11 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public ResponseDto update(UserRequestDto request) {
-		Helper.validateUserForUpdation(request);
+		Helper.validateUser(request);
 		UserModel user = userDao.update(request.getUser());
 		return ResponseDto.builder().withStatusType(StatusType.SUCCESS)
-				.withMessage("User for ID [%s] updated successfully", user.getId()).withData(user).build();
+				.withMessage("User for ID [%s] updated successfully", user.getId()).withData(user)
+				.build();
 	}
 
 	/**
@@ -116,8 +120,8 @@ public class UserServiceImpl implements UserService {
 		if (Helper.isNullOrEmptyString(id)) {
 			throw new IllegalArgumentException("User id can't be null or empty");
 		}
-		return ResponseDto.builder().withStatusType(StatusType.SUCCESS).withMessage("User for id [%s] exists ", id)
-				.withData(userDao.exists(id)).build();
+		return ResponseDto.builder().withStatusType(StatusType.SUCCESS)
+				.withMessage("User for id [%s] exists ", id).withData(userDao.exists(id)).build();
 	}
 
 	/**
@@ -135,7 +139,8 @@ public class UserServiceImpl implements UserService {
 		}
 		UserModel user = userDao.delete(id);
 		return ResponseDto.builder().withStatusType(StatusType.SUCCESS)
-				.withMessage("User for ID [%s] deleted successfully", user.getId()).withData(user).build();
+				.withMessage("User for ID [%s] deleted successfully", user.getId()).withData(user)
+				.build();
 	}
 
 }

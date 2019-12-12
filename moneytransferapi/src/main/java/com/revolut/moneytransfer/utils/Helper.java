@@ -3,6 +3,7 @@ package com.revolut.moneytransfer.utils;
 import java.util.Objects;
 
 import com.google.gson.Gson;
+import com.revolut.moneytransfer.dto.AccountRequestDto;
 import com.revolut.moneytransfer.dto.UserRequestDto;
 import com.revolut.moneytransfer.exception.BadRequestParamsException;
 import com.revolut.moneytransfer.exception.InvalidRequestException;
@@ -33,6 +34,10 @@ public class Helper {
 	private static final String ACCOUNT_API = "/account";
 	public static final String GET_ACCOUNTS = ACCOUNT_API + "/all";
 	public static final String GET_ACCOUNT_BY_ID = ACCOUNT_API + "/:id";
+	public static final String POST_ACCOUNT_CREATE = ACCOUNT_API + "/";
+	public static final String DELETE_ACCOUNT_BY_ID = ACCOUNT_API + "/:id";
+	public static final String PUT_ACCOUNT_UPDATE = ACCOUNT_API + "/";
+	public static final String OPTION_ACCOUNT_EXIST = ACCOUNT_API + "/:id";
 
 	/************ API properties ***********/
 	public static final String RESPONSE_TYPE_JSON = "application/json";
@@ -63,33 +68,36 @@ public class Helper {
 	/**
 	 * @param req
 	 */
-	public static void validateUserForCreation(UserRequestDto req) {
-		commonValidateForRequest(req);
-		validateUserForUpdation(req);
-		if (isNullOrEmptyString(req.getUser().getContactNumber()))
-			throw new BadRequestParamsException("Request does not contain USER[contactNumber]");
-		if (isNullOrEmptyString(req.getUser().getLastName()))
-			throw new BadRequestParamsException("Request does not contain USER[lastName]");
-	}
-
-	/**
-	 * @param req
-	 */
-	public static void validateUserForUpdation(UserRequestDto req) {
-		commonValidateForRequest(req);
+	public static void validateUser(UserRequestDto req) {
+		if (Objects.isNull(req) || Objects.isNull(req.getUser()))
+			throw new InvalidRequestException("Request cannot be null");
+		if (isNullOrEmptyString(req.getUser().getId()))
+			throw new BadRequestParamsException("Request does not contain USER[id]");
 		if (isNullOrEmptyString(req.getUser().getCNIC()))
 			throw new BadRequestParamsException("Request does not contain USER[CNIC]");
 		if (isNullOrEmptyString(req.getUser().getEmail()))
 			throw new BadRequestParamsException("Request does not contain USER[email]");
 		if (isNullOrEmptyString(req.getUser().getFirstName()))
 			throw new BadRequestParamsException("Request does not contain USER[firstName]");
+		if (isNullOrEmptyString(req.getUser().getContactNumber()))
+			throw new BadRequestParamsException("Request does not contain USER[contactNumber]");
+		if (isNullOrEmptyString(req.getUser().getLastName()))
+			throw new BadRequestParamsException("Request does not contain USER[lastName]");
 	}
 
-	private static void commonValidateForRequest(UserRequestDto req) {
-		if (Objects.isNull(req) || Objects.isNull(req.getUser()))
+	public static void validateAccount(AccountRequestDto req) {
+		if (Objects.isNull(req) || Objects.isNull(req.getAccount()))
 			throw new InvalidRequestException("Request cannot be null");
-		if (isNullOrEmptyString(req.getUser().getId()))
-			throw new BadRequestParamsException("Request does not contain USER[id]");
+		if (isNullOrEmptyString(req.getAccount().getId()))
+			throw new BadRequestParamsException("Request does not contain Account[id]");
+		if (isNullOrEmptyString(req.getAccount().getAccountTitle()))
+			throw new BadRequestParamsException("Request does not contain Account[accountTitle]");
+		if (Objects.isNull(req.getAccount().getBalance()))
+			throw new BadRequestParamsException("Request does not contain Account[balance]");
+		if (Objects.isNull(req.getAccount().getUserId()))
+			throw new BadRequestParamsException("Request does not contain Account[userId]");
+		if (Objects.isNull(req.getAccount().getCurrency()))
+			throw new BadRequestParamsException("Request does not contain Account[currency]");
 	}
 
 	public static String getJson(Object obj) {

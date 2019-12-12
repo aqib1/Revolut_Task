@@ -3,7 +3,7 @@ package com.revolut.moneytransfer.dagger2.components;
 import javax.inject.Singleton;
 
 import com.revolut.moneytransfer.dagger2.modules.AccountServiceModule;
-import com.revolut.moneytransfer.service.user.Impl.AccountServiceImpl;
+import com.revolut.moneytransfer.service.account.Impl.AccountServiceImpl;
 
 import dagger.Component;
 
