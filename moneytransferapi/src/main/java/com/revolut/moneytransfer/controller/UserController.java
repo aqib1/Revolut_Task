@@ -17,7 +17,7 @@ import java.util.Objects;
 import com.google.gson.Gson;
 import com.revolut.moneytransfer.dagger2.components.DaggerUserServiceComponent;
 import com.revolut.moneytransfer.dagger2.components.UserServiceComponent;
-import com.revolut.moneytransfer.dto.RequestDto;
+import com.revolut.moneytransfer.dto.UserRequestDto;
 import com.revolut.moneytransfer.service.user.UserService;
 import com.revolut.moneytransfer.utils.Helper;
 
@@ -35,7 +35,7 @@ public class UserController {
 	private UserServiceComponent userServiceComponent = DaggerUserServiceComponent.create();
 	// Getting service from component
 	private UserService userService = userServiceComponent.buildUserServiceImpl();
-	private static UserController userController = null;
+	private volatile static UserController userController = null;
 
 	private UserController() {
 
@@ -78,7 +78,7 @@ public class UserController {
 	 */
 	public UserController registerPostCreateUserAPI() {
 		post(POST_USER_CREATE, (request, response) -> {
-			return Helper.getJson(userService.create(new Gson().fromJson(request.body(), RequestDto.class)));
+			return Helper.getJson(userService.create(new Gson().fromJson(request.body(), UserRequestDto.class)));
 		});
 		return this;
 	}
@@ -107,7 +107,7 @@ public class UserController {
 	 */
 	public UserController registerUpdateUserAPI() {
 		put(PUT_USER_UPDATE, (request, response) -> {
-			return Helper.getJson(userService.update(new Gson().fromJson(request.body(), RequestDto.class)));
+			return Helper.getJson(userService.update(new Gson().fromJson(request.body(), UserRequestDto.class)));
 		});
 		return this;
 	}

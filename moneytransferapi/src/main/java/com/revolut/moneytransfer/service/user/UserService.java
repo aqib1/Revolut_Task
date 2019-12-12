@@ -1,6 +1,6 @@
 package com.revolut.moneytransfer.service.user;
 
-import com.revolut.moneytransfer.dto.RequestDto;
+import com.revolut.moneytransfer.dto.UserRequestDto;
 import com.revolut.moneytransfer.dto.ResponseDto;
 
 /**
@@ -21,10 +21,10 @@ public interface UserService {
 	ResponseDto getById(String id) throws IllegalArgumentException;
 
 	// Create new user and returned newly created user
-	ResponseDto create(RequestDto request);
+	ResponseDto create(UserRequestDto request);
 
 	// Update user and return updated user
-	ResponseDto update(RequestDto request);
+	ResponseDto update(UserRequestDto request);
 
 	// Check is user exists by id
 	ResponseDto exists(String id);

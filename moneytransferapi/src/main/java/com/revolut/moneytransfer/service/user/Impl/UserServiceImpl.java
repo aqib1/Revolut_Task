@@ -5,7 +5,7 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 import com.revolut.moneytransfer.dao.user.UserDao;
-import com.revolut.moneytransfer.dto.RequestDto;
+import com.revolut.moneytransfer.dto.UserRequestDto;
 import com.revolut.moneytransfer.dto.ResponseDto;
 import com.revolut.moneytransfer.dto.status.StatusType;
 import com.revolut.moneytransfer.models.UserModel;
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
 	 * @return {@link ResponseDto}
 	 */
 	@Override
-	public ResponseDto create(RequestDto request) {
+	public ResponseDto create(UserRequestDto request) {
 		Helper.validateUserForCreation(request);
 		UserModel user = userDao.create(request.getUser());
 		return ResponseDto.builder().withStatusType(StatusType.SUCCESS)
@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
 	 * @return {@link ResponseDto}
 	 */
 	@Override
-	public ResponseDto update(RequestDto request) {
+	public ResponseDto update(UserRequestDto request) {
 		Helper.validateUserForUpdation(request);
 		UserModel user = userDao.update(request.getUser());
 		return ResponseDto.builder().withStatusType(StatusType.SUCCESS)

@@ -3,7 +3,7 @@ package com.revolut.moneytransfer.utils;
 import java.util.Objects;
 
 import com.google.gson.Gson;
-import com.revolut.moneytransfer.dto.RequestDto;
+import com.revolut.moneytransfer.dto.UserRequestDto;
 import com.revolut.moneytransfer.exception.BadRequestParamsException;
 import com.revolut.moneytransfer.exception.InvalidRequestException;
 
@@ -56,7 +56,7 @@ public class Helper {
 	/**
 	 * @param req
 	 */
-	public static void validateUserForCreation(RequestDto req) {
+	public static void validateUserForCreation(UserRequestDto req) {
 		commonValidateForRequest(req);
 		validateUserForUpdation(req);
 		if (isNullOrEmptyString(req.getUser().getContactNumber()))
@@ -68,7 +68,7 @@ public class Helper {
 	/**
 	 * @param req
 	 */
-	public static void validateUserForUpdation(RequestDto req) {
+	public static void validateUserForUpdation(UserRequestDto req) {
 		commonValidateForRequest(req);
 		if (isNullOrEmptyString(req.getUser().getCNIC()))
 			throw new BadRequestParamsException("Request does not contain USER[CNIC]");
@@ -78,7 +78,7 @@ public class Helper {
 			throw new BadRequestParamsException("Request does not contain USER[firstName]");
 	}
 
-	private static void commonValidateForRequest(RequestDto req) {
+	private static void commonValidateForRequest(UserRequestDto req) {
 		if (Objects.isNull(req) || Objects.isNull(req.getUser()))
 			throw new InvalidRequestException("Request cannot be null");
 		if (isNullOrEmptyString(req.getUser().getId()))

@@ -6,13 +6,13 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class RequestDto {
+public class UserRequestDto {
 	private UserModel user;
 
 	/**
 	 * @param builder
 	 */
-	private RequestDto(Builder builder) {
+	private UserRequestDto(Builder builder) {
 		this.user = builder.user;
 	}
 
@@ -35,8 +35,8 @@ public class RequestDto {
 			return this;
 		}
 
-		public RequestDto build() {
-			return new RequestDto(this);
+		public UserRequestDto build() {
+			return new UserRequestDto(this);
 		}
 	}
 }
