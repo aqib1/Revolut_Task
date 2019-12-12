@@ -46,26 +46,33 @@ public class SparkApp {
 	public SparkApp registerExceptions() {
 		// Creating advice for InvalidRequestException
 		ExceptionAdvice.getInstance()
-				.exceptionAdvice(ExceptionUtility.builder().withException(InvalidRequestException.class)
-						.withStatus(HttpStatus.BAD_REQUEST_400).build())
+				.exceptionAdvice(
+						ExceptionUtility.builder().withException(InvalidRequestException.class)
+								.withStatus(HttpStatus.BAD_REQUEST_400).build())
 				// Creating advice for IllegalArgumentException
-				.exceptionAdvice(ExceptionUtility.builder().withException(IllegalArgumentException.class)
-						.withStatus(HttpStatus.EXPECTATION_FAILED_417).build())
+				.exceptionAdvice(
+						ExceptionUtility.builder().withException(IllegalArgumentException.class)
+								.withStatus(HttpStatus.EXPECTATION_FAILED_417).build())
 				// Creating advice for NullPointerException
-				.exceptionAdvice(ExceptionUtility.builder().withException(NullPointerException.class)
-						.withStatus(HttpStatus.EXPECTATION_FAILED_417).build())
+				.exceptionAdvice(
+						ExceptionUtility.builder().withException(NullPointerException.class)
+								.withStatus(HttpStatus.EXPECTATION_FAILED_417).build())
 				// Creating advice for BadRequestException
-				.exceptionAdvice(ExceptionUtility.builder().withException(BadRequestParamsException.class)
-						.withStatus(HttpStatus.EXPECTATION_FAILED_417).build())
+				.exceptionAdvice(
+						ExceptionUtility.builder().withException(BadRequestParamsException.class)
+								.withStatus(HttpStatus.EXPECTATION_FAILED_417).build())
 				// IllegalMonitorStateException for StampedLock unLockRead method
-				.exceptionAdvice(ExceptionUtility.builder().withException(IllegalMonitorStateException.class)
-						.withStatus(HttpStatus.EXPECTATION_FAILED_417).build())
+				.exceptionAdvice(
+						ExceptionUtility.builder().withException(IllegalMonitorStateException.class)
+								.withStatus(HttpStatus.EXPECTATION_FAILED_417).build())
 				// Creating advice for DataNotFoundException
-				.exceptionAdvice(ExceptionUtility.builder().withException(DataNotFoundException.class)
-						.withStatus(HttpStatus.EXPECTATION_FAILED_417).build())
+				.exceptionAdvice(
+						ExceptionUtility.builder().withException(DataNotFoundException.class)
+								.withStatus(HttpStatus.EXPECTATION_FAILED_417).build())
 				// Creating advice for DataDuplicationException
-				.exceptionAdvice(ExceptionUtility.builder().withException(DataDuplicationException.class)
-						.withStatus(HttpStatus.EXPECTATION_FAILED_417).build());
+				.exceptionAdvice(
+						ExceptionUtility.builder().withException(DataDuplicationException.class)
+								.withStatus(HttpStatus.EXPECTATION_FAILED_417).build());
 		return this;
 	}
 
@@ -79,12 +86,9 @@ public class SparkApp {
 	 */
 	public SparkApp registerControllers() {
 		// User controller API registrations
-		UserController.getInstance().registerGetAllUserAPI();
-		UserController.getInstance().registerGetUserByIdAPI();
-		UserController.getInstance().registerPostCreateUserAPI();
-		UserController.getInstance().registerDeleteUserAPI();
-		UserController.getInstance().registerUpdateUserAPI();
-		UserController.getInstance().registerCheckUserAPI();
+		UserController.getInstance().registerGetAllUserAPI().registerGetUserByIdAPI()
+				.registerPostCreateUserAPI().registerDeleteUserAPI().registerUpdateUserAPI()
+				.registerCheckUserAPI();
 		return this;
 	}
 

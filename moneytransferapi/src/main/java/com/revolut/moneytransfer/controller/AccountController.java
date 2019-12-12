@@ -14,9 +14,14 @@ import java.util.Objects;
 public class AccountController {
 
 	private volatile static AccountController accountController = null;
-	
+
 	private AccountController() {
 
+	}
+	
+	public AccountController registerGetAllAccountAPI() {
+		
+		return this;
 	}
 
 	public static AccountController getInstance() {

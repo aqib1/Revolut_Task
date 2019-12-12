@@ -78,7 +78,8 @@ public class UserController {
 	 */
 	public UserController registerPostCreateUserAPI() {
 		post(POST_USER_CREATE, (request, response) -> {
-			return Helper.getJson(userService.create(new Gson().fromJson(request.body(), UserRequestDto.class)));
+			return Helper.getJson(
+					userService.create(new Gson().fromJson(request.body(), UserRequestDto.class)));
 		});
 		return this;
 	}
@@ -107,7 +108,8 @@ public class UserController {
 	 */
 	public UserController registerUpdateUserAPI() {
 		put(PUT_USER_UPDATE, (request, response) -> {
-			return Helper.getJson(userService.update(new Gson().fromJson(request.body(), UserRequestDto.class)));
+			return Helper.getJson(
+					userService.update(new Gson().fromJson(request.body(), UserRequestDto.class)));
 		});
 		return this;
 	}

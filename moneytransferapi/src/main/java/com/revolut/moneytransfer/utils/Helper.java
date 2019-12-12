@@ -20,19 +20,26 @@ import com.revolut.moneytransfer.exception.InvalidRequestException;
 public class Helper {
 
 	public static final Gson GSON = new Gson();
-	private final static String USER_API = "/user";
-	public final static String GET_USERS = USER_API + "/all";
-	public final static String GET_USER_BY_ID = USER_API + "/:id";
-	public final static String POST_USER_CREATE = USER_API + "/";
-	public final static String DELETE_USER_BY_ID = USER_API + "/:id";
-	public final static String PUT_USER_UPDATE = USER_API + "/";
-	public final static String OPTION_USER_EXIST = USER_API + "/:id";
-	
-	public final static String RESPONSE_TYPE_JSON = "application/json";
-	public final static int DEFAULT_SPARK_PORT = 4567;
-	public final static int PORT_8080 = 8080;
+	/**************** User API ***********/
+	private static final String USER_API = "/user";
+	public static final String GET_USERS = USER_API + "/all";
+	public static final String GET_USER_BY_ID = USER_API + "/:id";
+	public static final String POST_USER_CREATE = USER_API + "/";
+	public static final String DELETE_USER_BY_ID = USER_API + "/:id";
+	public static final String PUT_USER_UPDATE = USER_API + "/";
+	public static final String OPTION_USER_EXIST = USER_API + "/:id";
 
-	/************* User table consts ************/
+	/******************* Account API ***********************/
+	private static final String ACCOUNT_API = "/account";
+	public static final String GET_ACCOUNTS = ACCOUNT_API + "/all";
+	public static final String GET_ACCOUNT_BY_ID = ACCOUNT_API + "/:id";
+
+	/************ API properties ***********/
+	public static final String RESPONSE_TYPE_JSON = "application/json";
+	public static final int DEFAULT_SPARK_PORT = 4567;
+	public static final int PORT_8080 = 8080;
+
+	/************* User table constant ************/
 	public static final String ID_COL = "id";
 	public static final String FIRST_NAME_COL = "firstName";
 	public static final String LAST_NAME_COL = "lastName";

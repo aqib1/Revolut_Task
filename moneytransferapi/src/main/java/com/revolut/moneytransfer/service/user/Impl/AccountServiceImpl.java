@@ -1,5 +1,8 @@
 package com.revolut.moneytransfer.service.user.Impl;
 
+import javax.inject.Inject;
+
+import com.revolut.moneytransfer.dao.account.AccountDao;
 import com.revolut.moneytransfer.dto.AccountRequestDto;
 import com.revolut.moneytransfer.dto.ResponseDto;
 import com.revolut.moneytransfer.service.AccountService;
@@ -15,6 +18,20 @@ import com.revolut.moneytransfer.service.AccountService;
  * 
  */
 public class AccountServiceImpl implements AccountService {
+
+	private AccountDao accountDao;
+
+	/**
+	 * <p>
+	 * Account DAO injection using dagger2
+	 * </p>
+	 * 
+	 * @param userDao
+	 */
+	@Inject
+	public AccountServiceImpl(AccountDao accountDao) {
+		this.accountDao = accountDao;
+	}
 
 	@Override
 	public ResponseDto getAll() {

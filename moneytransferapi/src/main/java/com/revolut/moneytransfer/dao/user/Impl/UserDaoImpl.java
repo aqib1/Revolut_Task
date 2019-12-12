@@ -139,7 +139,8 @@ public class UserDaoImpl implements UserDao {
 	public UserModel create(UserModel user) {
 		// Check is user already exists and throw exception
 		if (userData.containsKey(user.getId()))
-			throw new DataDuplicationException("User already exists against id [" + user.getId() + "]");
+			throw new DataDuplicationException(
+					"User already exists against id [" + user.getId() + "]");
 		// Acquire a write lock
 		long stemp = stampedLock.writeLock();
 		try {
@@ -161,7 +162,8 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public UserModel update(UserModel user) {
 		if (!userData.containsKey(user.getId()))
-			throw new DataNotFoundException("User Id [" + user.getId() + "] not exists in database");
+			throw new DataNotFoundException(
+					"User Id [" + user.getId() + "] not exists in database");
 		userData.put(user.getId(), user);
 		return user;
 	}
