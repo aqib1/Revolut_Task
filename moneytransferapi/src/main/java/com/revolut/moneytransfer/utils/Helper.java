@@ -25,7 +25,9 @@ public class Helper {
 	public final static String GET_USER_BY_ID = USER_API + "/:id";
 	public final static String POST_USER_CREATE = USER_API + "/";
 	public final static String DELETE_USER_BY_ID = USER_API + "/:id";
-
+	public final static String PUT_USER_UPDATE = USER_API + "/";
+	public final static String OPTION_USER_EXIST = USER_API + "/:id";
+	
 	public final static String RESPONSE_TYPE_JSON = "application/json";
 	public final static int DEFAULT_SPARK_PORT = 4567;
 	public final static int PORT_8080 = 8080;
@@ -58,9 +60,9 @@ public class Helper {
 		commonValidateForRequest(req);
 		validateUserForUpdation(req);
 		if (isNullOrEmptyString(req.getUser().getContactNumber()))
-			throw new BadRequestParamsException("Request does not cotain USER[contactNumber]");
+			throw new BadRequestParamsException("Request does not contain USER[contactNumber]");
 		if (isNullOrEmptyString(req.getUser().getLastName()))
-			throw new BadRequestParamsException("Request does not cotain USER[lastName]");
+			throw new BadRequestParamsException("Request does not contain USER[lastName]");
 	}
 
 	/**
@@ -69,18 +71,18 @@ public class Helper {
 	public static void validateUserForUpdation(RequestDto req) {
 		commonValidateForRequest(req);
 		if (isNullOrEmptyString(req.getUser().getCNIC()))
-			throw new BadRequestParamsException("Request does not cotain USER[CNIC]");
+			throw new BadRequestParamsException("Request does not contain USER[CNIC]");
 		if (isNullOrEmptyString(req.getUser().getEmail()))
-			throw new BadRequestParamsException("Request does not cotain USER[email]");
+			throw new BadRequestParamsException("Request does not contain USER[email]");
 		if (isNullOrEmptyString(req.getUser().getFirstName()))
-			throw new BadRequestParamsException("Request does not cotain USER[firstName]");
+			throw new BadRequestParamsException("Request does not contain USER[firstName]");
 	}
 
 	private static void commonValidateForRequest(RequestDto req) {
 		if (Objects.isNull(req) || Objects.isNull(req.getUser()))
 			throw new InvalidRequestException("Request cannot be null");
 		if (isNullOrEmptyString(req.getUser().getId()))
-			throw new BadRequestParamsException("Request does not containe USER[id]");
+			throw new BadRequestParamsException("Request does not contain USER[id]");
 	}
 
 	public static String getJson(Object obj) {

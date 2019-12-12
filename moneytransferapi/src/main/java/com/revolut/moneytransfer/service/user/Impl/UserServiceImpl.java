@@ -1,6 +1,6 @@
 package com.revolut.moneytransfer.service.user.Impl;
 
-import java.util.List;
+import java.util.Collection;
 
 import javax.inject.Inject;
 
@@ -46,8 +46,10 @@ public class UserServiceImpl implements UserService {
 	 * @return {@link List<UserModel>}
 	 */
 	@Override
-	public List<UserModel> getAll() {
-		return userDao.getAll();
+	public ResponseDto getAll() {
+		Collection<UserModel> users = userDao.getAll();
+		return ResponseDto.builder().withStatusType(StatusType.SUCCESS)
+				.withMessage("Users recieved with length [%s]", users.size()).withData(users).build();
 	}
 
 	/**
@@ -55,8 +57,9 @@ public class UserServiceImpl implements UserService {
 	 * Get user by its id
 	 * </p>
 	 * 
+	 * @throws IllegalArgumentException
 	 * @Param id
-	 * @return {@link UserModel}
+	 * @return {@link ResponseDto}
 	 */
 	@Override
 	public ResponseDto getById(String id) throws IllegalArgumentException {
@@ -65,7 +68,7 @@ public class UserServiceImpl implements UserService {
 		}
 		UserModel model = userDao.getById(id);
 		return ResponseDto.builder().withStatusType(StatusType.SUCCESS)
-				.withMessage("User [%s] deleted successfully", model).withData(model).build();
+				.withMessage("User for ID [%s] found successfully", model.getId()).withData(model).build();
 	}
 
 	/**
@@ -74,36 +77,65 @@ public class UserServiceImpl implements UserService {
 	 * </p>
 	 * 
 	 * @param request
-	 * @return {@link UserModel}
+	 * @return {@link ResponseDto}
 	 */
 	@Override
 	public ResponseDto create(RequestDto request) {
 		Helper.validateUserForCreation(request);
 		UserModel user = userDao.create(request.getUser());
 		return ResponseDto.builder().withStatusType(StatusType.SUCCESS)
-				.withMessage("User [%s] created successfully", user).withData(user).build();
+				.withMessage("User for ID [%s] created successfully", user.getId()).withData(user).build();
 	}
 
+	/**
+	 * <p>
+	 * User update and return updated user
+	 * </p>
+	 * 
+	 * @param request
+	 * @return {@link ResponseDto}
+	 */
 	@Override
 	public ResponseDto update(RequestDto request) {
 		Helper.validateUserForUpdation(request);
+		UserModel user = userDao.update(request.getUser());
 		return ResponseDto.builder().withStatusType(StatusType.SUCCESS)
-				.withMessage("User [%s] updated successfully", userDao.update(request.getUser())).build();
+				.withMessage("User for ID [%s] updated successfully", user.getId()).withData(user).build();
 	}
 
+	/**
+	 * <p>
+	 * check user exists against id
+	 * </p>
+	 * 
+	 * @param id
+	 * @return {@link ResponseDto}
+	 */
 	@Override
-	public boolean exists(String id) {
-		return userDao.exists(id);
+	public ResponseDto exists(String id) {
+		if (Helper.isNullOrEmptyString(id)) {
+			throw new IllegalArgumentException("User id can't be null or empty");
+		}
+		return ResponseDto.builder().withStatusType(StatusType.SUCCESS).withMessage("User for id [%s] exists ", id)
+				.withData(userDao.exists(id)).build();
 	}
 
-	// Delete user by id, return deleted User
+	/**
+	 * <p>
+	 * delete user against id
+	 * </p>
+	 * 
+	 * @param id
+	 * @return {@link ResponseDto}
+	 */
 	@Override
 	public ResponseDto delete(String id) {
 		if (Helper.isNullOrEmptyString(id)) {
 			throw new IllegalArgumentException("User id can't be null or empty");
 		}
+		UserModel user = userDao.delete(id);
 		return ResponseDto.builder().withStatusType(StatusType.SUCCESS)
-				.withMessage("User [%s] deleted successfully", userDao.delete(id)).build();
+				.withMessage("User for ID [%s] deleted successfully", user.getId()).withData(user).build();
 	}
 
 }

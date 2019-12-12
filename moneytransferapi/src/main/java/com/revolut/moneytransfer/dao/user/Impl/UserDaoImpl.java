@@ -1,24 +1,26 @@
 package com.revolut.moneytransfer.dao.user.Impl;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.StampedLock;
 
 import com.revolut.moneytransfer.dao.user.UserDao;
+import com.revolut.moneytransfer.exception.DataDuplicationException;
+import com.revolut.moneytransfer.exception.DataNotFoundException;
 import com.revolut.moneytransfer.models.UserModel;
+import com.revolut.moneytransfer.utils.data.DataUtils;
 
 /**
- * =====Database information==============
+ * ===== Database information ==============
  * <p>
  * This UserDaoImpl class is used to provide user details and IO operation
- * against data. For the simplicity of task as it mentioned in requirement II i am
- * not using any database instead of that i am using map, in future we can
+ * against data. For the simplicity of task as it mentioned in requirement II i
+ * am not using any database instead of that i am using map, in future we can
  * replace that structure with actual database
  * </p>
- * =========Thread safety information=======
+ * ========= Thread safety information =======
  * <p>
  * To make it thread-safe we will use synchronization as we are using Map, and
  * that will be updated, with requests. we have to make our data synchronize for
@@ -35,8 +37,22 @@ import com.revolut.moneytransfer.models.UserModel;
  * 
  * <p>
  * I am using java 1.8 StampedLock @see {@link StampedLock} <br>
- * we can also use java 1.7 ReentrantLock @see {@link ReentrantLock}
- * </p>
+ * <strong> Reason of using StampedLock is one of its feature optimistic locking
+ * in this lock as per documentation said, we do not need to apply full-fledged
+ * read lock every time, some time lock is not held by any write operation, we
+ * use tryOptimisticRead to check if the lock is hold by write operation and
+ * then check result with validate method. </strong> <br>
+ * Java 1.8 StampedLock is much more efficient and fast as compared to
+ * ReentrantLock specially optimistic locking which make synchronization
+ * overhead very slow
+ * 
+ * @see {@link StampedLock#tryOptimisticRead()} for more details <br>
+ *      </p>
+ * 
+ *      <p>
+ *      If above seems complex and you don't like optimistic locking you can use
+ *      java 1.7 ReentrantLock @see {@link ReentrantLock}
+ *      </p>
  * 
  * @author AQIB JAVED
  * @version 1.0
@@ -45,27 +61,74 @@ import com.revolut.moneytransfer.models.UserModel;
  */
 public class UserDaoImpl implements UserDao {
 	private volatile static UserDaoImpl userDaoImpl = null;
-	private Map<String, UserModel> userData = new ConcurrentHashMap<>();
+	private Map<String, UserModel> userData = null;
+	private StampedLock stampedLock = new StampedLock();
 
 	private UserDaoImpl() {
-
+		userData = DataUtils.getInstance().getUserData();
 	}
 
 	/**
+	 * <p>
+	 * This method is use to return all Users. We used optimistic read lock from
+	 * StampedLock
+	 * </p>
+	 * 
 	 * @return {@link List<UserModel>}
 	 */
 	@Override
-	public List<UserModel> getAll() {
-		return Arrays.asList(UserModel.builder().withCNIC("1234").build());
+	public Collection<UserModel> getAll() {
+		// return zero if it acquire by a write lock (exclusive locked)
+		long stamp = stampedLock.tryOptimisticRead();
+		// Synchronization overhead is very low if validate() succeeds
+		// Always return true if stamp is non zero (as not acquired by write lock)
+		if (stampedLock.validate(stamp))
+			return getAllUsers();
+		// Only in the case when write lock is acquired we need to apply read lock
+		stamp = stampedLock.readLock();
+		try {
+			return userData.values();
+		} finally {
+			stampedLock.unlockRead(stamp);
+		}
+	}
+
+	private Collection<UserModel> getAllUsers() {
+		if (userData.isEmpty())
+			throw new DataNotFoundException("User details not exists in database");
+		return userData.values();
 	}
 
 	/**
+	 * <p>
+	 * This method is use to return user by id. We used optimistic read lock from
+	 * StampedLock
+	 * </p>
+	 * 
 	 * @param id
 	 * @return {@link UserModel}
 	 */
 	@Override
 	public UserModel getById(String id) {
-		return UserModel.builder().withCNIC("1234").build();
+		// return zero if it acquire by a write lock (exclusive locked)
+		long stamp = stampedLock.tryOptimisticRead();
+		// Synchronization overhead is very low if validate() succeeds
+		// Always return true if stamp is non zero (as not acquired by write lock)
+		if (stampedLock.validate(stamp))
+			return getUserById(id);
+		// Only in the case when write lock is acquired we need to apply read lock
+		stamp = stampedLock.readLock();
+		try {
+			return getUserById(id);
+		} finally {
+			stampedLock.unlockRead(stamp);
+		}
+	}
+
+	private UserModel getUserById(String id) {
+		if (!userData.containsKey(id))
+			throw new DataNotFoundException("User not exists against id [" + id + "]");
+		return userData.get(id);
 	}
 
 	/**
@@ -74,17 +137,33 @@ public class UserDaoImpl implements UserDao {
 	 */
 	@Override
 	public UserModel create(UserModel user) {
-
+		// Check is user already exists and throw exception
+		if (userData.containsKey(user.getId()))
+			throw new DataDuplicationException("User already exists against id [" + user.getId() + "]");
+		// Acquire a write lock
+		long stemp = stampedLock.writeLock();
+		try {
+			userData.put(user.getId(), user);
+		} finally {
+			stampedLock.unlockWrite(stemp);
+		}
 		return user;
 	}
 
 	/**
+	 * <p>
+	 * this method return updated value
+	 * </p>
+	 * 
 	 * @param user
 	 * @return {@link UserModel}
 	 */
 	@Override
 	public UserModel update(UserModel user) {
-		return null;
+		if (!userData.containsKey(user.getId()))
+			throw new DataNotFoundException("User Id [" + user.getId() + "] not exists in database");
+		userData.put(user.getId(), user);
+		return user;
 	}
 
 	/**
@@ -93,16 +172,24 @@ public class UserDaoImpl implements UserDao {
 	 */
 	@Override
 	public boolean exists(String id) {
-		return false;
+		if (!userData.containsKey(id))
+			throw new DataNotFoundException("User Id [" + id + "] not exists in database");
+		return userData.containsKey(id);
 	}
 
 	/**
+	 * <p>
+	 * This method return the value which is deleted from data
+	 * </p>
+	 * 
 	 * @param id
 	 * @return {@link UserModel}
 	 */
 	@Override
 	public UserModel delete(String id) {
-		return null;
+		if (!userData.containsKey(id))
+			throw new DataNotFoundException("User Id [" + id + "] not exists in database");
+		return userData.remove(id);
 	}
 
 	// Double check locking singleton pattern

@@ -1,6 +1,6 @@
 package com.revolut.moneytransfer.dao.user;
 
-import java.util.List;
+import java.util.Collection;
 
 import com.revolut.moneytransfer.models.UserModel;
 
@@ -15,7 +15,7 @@ import com.revolut.moneytransfer.models.UserModel;
  */
 public interface UserDao {
 	// Get-all user from DB
-	List<UserModel> getAll();
+	Collection<UserModel> getAll();
 
 	// Get user by id from DB
 	UserModel getById(String id);

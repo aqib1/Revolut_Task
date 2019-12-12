@@ -7,21 +7,21 @@ package com.revolut.moneytransfer.exception;
  * @see {@link RuntimeException}
  *
  */
-public class BadRequestParamsException extends RuntimeException {
+public class DataNotFoundException extends RuntimeException {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -5816875620615823349L;
+	private static final long serialVersionUID = -4798977083347296281L;
 
-	public BadRequestParamsException() {
+	public DataNotFoundException() {
 
 	}
 
 	/**
 	 * @param message
 	 */
-	public BadRequestParamsException(String message) {
+	public DataNotFoundException(String message) {
 		super(message);
 	}
 
@@ -29,8 +29,7 @@ public class BadRequestParamsException extends RuntimeException {
 	 * @param message
 	 * @param throwable
 	 */
-	public BadRequestParamsException(String message, Throwable throwable) {
+	public DataNotFoundException(String message, Throwable throwable) {
 		super(message, throwable);
 	}
-
 }

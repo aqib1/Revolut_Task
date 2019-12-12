@@ -1,10 +1,7 @@
 package com.revolut.moneytransfer.service.user;
 
-import java.util.List;
-
 import com.revolut.moneytransfer.dto.RequestDto;
 import com.revolut.moneytransfer.dto.ResponseDto;
-import com.revolut.moneytransfer.models.UserModel;
 
 /**
  * <p>
@@ -18,7 +15,7 @@ import com.revolut.moneytransfer.models.UserModel;
 public interface UserService {
 
 	// Get-all user from DB
-	List<UserModel> getAll();
+	ResponseDto getAll();
 
 	// Get user by id from DB
 	ResponseDto getById(String id) throws IllegalArgumentException;
@@ -30,7 +27,7 @@ public interface UserService {
 	ResponseDto update(RequestDto request);
 
 	// Check is user exists by id
-	boolean exists(String id);
+	ResponseDto exists(String id);
 
 	// Delete user by id
 	ResponseDto delete(String id);

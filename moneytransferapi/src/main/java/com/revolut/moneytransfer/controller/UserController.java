@@ -3,10 +3,14 @@ package com.revolut.moneytransfer.controller;
 import static com.revolut.moneytransfer.utils.Helper.DELETE_USER_BY_ID;
 import static com.revolut.moneytransfer.utils.Helper.GET_USERS;
 import static com.revolut.moneytransfer.utils.Helper.GET_USER_BY_ID;
+import static com.revolut.moneytransfer.utils.Helper.OPTION_USER_EXIST;
 import static com.revolut.moneytransfer.utils.Helper.POST_USER_CREATE;
+import static com.revolut.moneytransfer.utils.Helper.PUT_USER_UPDATE;
 import static spark.Spark.delete;
 import static spark.Spark.get;
 import static spark.Spark.post;
+import static spark.Spark.put;
+import static spark.Spark.options;
 
 import java.util.Objects;
 
@@ -14,8 +18,6 @@ import com.google.gson.Gson;
 import com.revolut.moneytransfer.dagger2.components.DaggerUserServiceComponent;
 import com.revolut.moneytransfer.dagger2.components.UserServiceComponent;
 import com.revolut.moneytransfer.dto.RequestDto;
-import com.revolut.moneytransfer.dto.ResponseDto;
-import com.revolut.moneytransfer.dto.status.StatusType;
 import com.revolut.moneytransfer.service.user.UserService;
 import com.revolut.moneytransfer.utils.Helper;
 
@@ -48,9 +50,7 @@ public class UserController {
 	 */
 	public UserController registerGetAllUserAPI() {
 		get(GET_USERS, (request, response) -> {
-			return new Gson().toJson(ResponseDto.builder().withStatusType(StatusType.SUCCESS)
-					.withMessage("User detailed recieved successfully")
-					.withData(new Gson().toJsonTree(userService.getAll())).build());
+			return Helper.getJson(userService.getAll());
 		});
 		return this;
 	}
@@ -62,7 +62,7 @@ public class UserController {
 	 * 
 	 * @return {@link UserController}
 	 */
-	public UserController registerGetUserbByIdAPI() {
+	public UserController registerGetUserByIdAPI() {
 		get(GET_USER_BY_ID, (request, response) -> {
 			return Helper.getJson(userService.getById(request.params(":id")));
 		});
@@ -71,23 +71,58 @@ public class UserController {
 
 	/**
 	 * <p>
-	 * This method is used to delete user against given id
+	 * This method is used to register post user creation API
 	 * </p>
 	 * 
 	 * @return {@link UserController}
 	 */
-	public UserController registerPostCreateUser() {
+	public UserController registerPostCreateUserAPI() {
 		post(POST_USER_CREATE, (request, response) -> {
 			return Helper.getJson(userService.create(new Gson().fromJson(request.body(), RequestDto.class)));
 		});
 		return this;
 	}
 
-	public UserController registerDeleteUser() {
+	/**
+	 * <p>
+	 * This method is used to register delete user creation API
+	 * </p>
+	 * 
+	 * @return {@link UserController}
+	 */
+	public UserController registerDeleteUserAPI() {
 		delete(DELETE_USER_BY_ID, (request, response) -> {
 			return Helper.getJson(userService.delete(request.params(":id")));
 		});
 
+		return this;
+	}
+
+	/**
+	 * <p>
+	 * This method is used to register update user creation API
+	 * </p>
+	 * 
+	 * @return {@link UserController}
+	 */
+	public UserController registerUpdateUserAPI() {
+		put(PUT_USER_UPDATE, (request, response) -> {
+			return Helper.getJson(userService.update(new Gson().fromJson(request.body(), RequestDto.class)));
+		});
+		return this;
+	}
+
+	/**
+	 * <p>
+	 * This method is used to register check user exist API
+	 * </p>
+	 * 
+	 * @return {@link UserController}
+	 */
+	public UserController registerCheckUserAPI() {
+		options(OPTION_USER_EXIST, (request, response) -> {
+			return Helper.getJson(userService.exists(request.params(":id")));
+		});
 		return this;
 	}
 
