@@ -4,3 +4,9 @@ moneytransferapi/.project
 moneytransferapi/.settings/
 .recommenders/
 moneytransferapi/.factorypath
+moneytransferapi/target/classes/
+moneytransferapi/target/maven-archiver/
+moneytransferapi/target/maven-status/
+moneytransferapi/target/surefire-reports/
+moneytransferapi/target/test-classes/
+moneytransferapi/target/moneytransferapi-0.0.1-SNAPSHOT.jar
