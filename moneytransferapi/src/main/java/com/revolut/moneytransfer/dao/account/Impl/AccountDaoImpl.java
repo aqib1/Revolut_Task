@@ -253,6 +253,14 @@ public class AccountDaoImpl implements AccountDao {
 		}
 	}
 
+	/**
+	 * <p>
+	 * This method is used to deposit amount from account
+	 * </p>
+	 * 
+	 * @param id
+	 * @return {@link DepositResponse}
+	 */
 	@Override
 	public DepositResponse deposit(DepositRequest depositRequest) {
 		long stemp = stampedLock.writeLock();

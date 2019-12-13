@@ -43,6 +43,9 @@ public class Helper {
 	public static final String POST_WITHDRAW = ACCOUNT_API + "/withdraw/";
 	public static final String POST_DEPOSIT = ACCOUNT_API + "/deposit/";
 
+	/****************** Transaction API *******************/
+	public static final String POST_TRANSACTION = "/trans/";
+
 	/************ API properties ***********/
 	public static final String RESPONSE_TYPE_JSON = "application/json";
 	public static final int DEFAULT_SPARK_PORT = 4567;

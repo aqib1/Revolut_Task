@@ -10,7 +10,7 @@ import com.revolut.moneytransfer.models.AccountModel;
 
 /**
  * <p>
- * User-DAO skeleton
+ * Account-DAO skeleton
  * </p>
  * 
  * @author AQIB JAVED

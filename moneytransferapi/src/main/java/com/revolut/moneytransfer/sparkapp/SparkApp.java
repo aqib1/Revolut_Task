@@ -8,6 +8,7 @@ import java.util.Objects;
 import org.eclipse.jetty.http.HttpStatus;
 
 import com.revolut.moneytransfer.controller.AccountController;
+import com.revolut.moneytransfer.controller.TransactionController;
 import com.revolut.moneytransfer.controller.UserController;
 import com.revolut.moneytransfer.exception.BadRequestParamsException;
 import com.revolut.moneytransfer.exception.DataDuplicationException;
@@ -102,6 +103,8 @@ public class SparkApp {
 				.registerPostCreateAccountAPI().registerDeleteAccountAPI()
 				.registerUpdateAccountAPI().registerCheckAccountAPI().registerWithdrawAPI()
 				.registerDepositAPI();
+		// Transaction controller API registrations
+		TransactionController.getInstance().registerTransactionAPI();
 		return this;
 	}
 
