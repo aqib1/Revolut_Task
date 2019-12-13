@@ -91,7 +91,7 @@ public class AccountDaoImpl implements AccountDao {
 		}
 	}
 
-	private Collection<AccountModel> getAllAccounts() {
+	private Collection<AccountModel> getAllAccounts() throws DataNotFoundException {
 		if (accountData.isEmpty())
 			throw new DataNotFoundException("Account details not exists in database");
 		return accountData.values();
@@ -127,7 +127,7 @@ public class AccountDaoImpl implements AccountDao {
 	 * @param id
 	 * @return
 	 */
-	private AccountModel getAccountById(String id) {
+	private AccountModel getAccountById(String id) throws DataNotFoundException {
 		if (!accountData.containsKey(id))
 			throw new DataNotFoundException("Account not exists against id [" + id + "]");
 		return accountData.get(id);
@@ -138,7 +138,8 @@ public class AccountDaoImpl implements AccountDao {
 	 * @return {@link AccountModel}
 	 */
 	@Override
-	public AccountModel create(AccountModel account) {
+	public AccountModel create(AccountModel account)
+			throws DataDuplicationException, IllegalArgumentException {
 		// Acquire a write lock
 		long stemp = stampedLock.writeLock();
 		try {
@@ -165,7 +166,7 @@ public class AccountDaoImpl implements AccountDao {
 	 * @return {@link AccountModel}
 	 */
 	@Override
-	public AccountModel update(AccountModel account) {
+	public AccountModel update(AccountModel account) throws DataNotFoundException {
 		// Acquire a write lock
 		long stemp = stampedLock.writeLock();
 		try {
@@ -184,7 +185,7 @@ public class AccountDaoImpl implements AccountDao {
 	 * @return {@link Boolean}
 	 */
 	@Override
-	public boolean exists(String id) {
+	public boolean exists(String id) throws DataNotFoundException {
 		if (!accountData.containsKey(id))
 			throw new DataNotFoundException("Account Id [" + id + "] not exists in database");
 		// return zero if it acquire by a write lock (exclusive locked)
@@ -211,7 +212,7 @@ public class AccountDaoImpl implements AccountDao {
 	 * @return {@link AccountModel}
 	 */
 	@Override
-	public AccountModel delete(String id) {
+	public AccountModel delete(String id) throws DataNotFoundException {
 		long stemp = stampedLock.writeLock();
 		try {
 			if (!accountData.containsKey(id))
@@ -231,7 +232,8 @@ public class AccountDaoImpl implements AccountDao {
 	 * @return {@link WithdrawResponseDto}
 	 */
 	@Override
-	public WithdrawResponseDto withDraw(WithdrawRequestDto withdrawRequestDto) {
+	public WithdrawResponseDto withDraw(WithdrawRequestDto withdrawRequestDto)
+			throws DataNotFoundException, InvalidAmountException {
 		long stemp = stampedLock.writeLock();
 		try {
 			if (!accountData.containsKey(withdrawRequestDto.getAccountId())) {
@@ -262,7 +264,8 @@ public class AccountDaoImpl implements AccountDao {
 	 * @return {@link DepositResponse}
 	 */
 	@Override
-	public DepositResponse deposit(DepositRequest depositRequest) {
+	public DepositResponse deposit(DepositRequest depositRequest)
+			throws DataNotFoundException, InvalidAmountException {
 		long stemp = stampedLock.writeLock();
 		try {
 			if (!accountData.containsKey(depositRequest.getAccountId()))

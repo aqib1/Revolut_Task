@@ -86,7 +86,7 @@ public class UserDaoImpl implements UserDao {
 		}
 	}
 
-	private Collection<UserModel> getAllUsers() {
+	private Collection<UserModel> getAllUsers() throws DataNotFoundException {
 		if (userData.isEmpty())
 			throw new DataNotFoundException("User details not exists in database");
 		return userData.values();
@@ -118,7 +118,7 @@ public class UserDaoImpl implements UserDao {
 		}
 	}
 
-	private UserModel getUserById(String id) {
+	private UserModel getUserById(String id) throws DataNotFoundException {
 		if (!userData.containsKey(id))
 			throw new DataNotFoundException("User not exists against id [" + id + "]");
 		return userData.get(id);
@@ -129,7 +129,7 @@ public class UserDaoImpl implements UserDao {
 	 * @return {@link UserModel}
 	 */
 	@Override
-	public UserModel create(UserModel user) {
+	public UserModel create(UserModel user) throws DataDuplicationException {
 		// Acquire a write lock
 		long stemp = stampedLock.writeLock();
 		// Check is user already exists and throw exception
@@ -153,7 +153,7 @@ public class UserDaoImpl implements UserDao {
 	 * @return {@link UserModel}
 	 */
 	@Override
-	public UserModel update(UserModel user) {
+	public UserModel update(UserModel user) throws DataNotFoundException {
 		// Acquire a write lock
 		long stemp = stampedLock.writeLock();
 		try {
@@ -172,7 +172,7 @@ public class UserDaoImpl implements UserDao {
 	 * @return {@link Boolean}
 	 */
 	@Override
-	public boolean exists(String id) {
+	public boolean exists(String id) throws DataNotFoundException {
 		if (!userData.containsKey(id))
 			throw new DataNotFoundException("User Id [" + id + "] not exists in database");
 		// return zero if it acquire by a write lock (exclusive locked)
@@ -200,12 +200,12 @@ public class UserDaoImpl implements UserDao {
 	 * @return {@link UserModel}
 	 */
 	@Override
-	public UserModel delete(String id) {
+	public UserModel delete(String id) throws DataNotFoundException {
 		// Acquire a write lock
 		long stemp = stampedLock.writeLock();
 		try {
-		if (!userData.containsKey(id))
-			throw new DataNotFoundException("User Id [" + id + "] not exists in database");
+			if (!userData.containsKey(id))
+				throw new DataNotFoundException("User Id [" + id + "] not exists in database");
 			return userData.remove(id);
 		} finally {
 			stampedLock.unlockWrite(stemp);

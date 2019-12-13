@@ -62,7 +62,7 @@ public class TransDaoImpl implements TransDao {
 	}
 
 	@Override
-	public TransResponseDto transfer(TransRequestDto request) {
+	public TransResponseDto transfer(TransRequestDto request) throws InvalidAmountException {
 		// Acquire a write lock
 		long stemp = stampedLock.writeLock();
 		try {
@@ -79,21 +79,13 @@ public class TransDaoImpl implements TransDao {
 			}
 			sender.setBalance(sender.getBalance().subtract(request.getAmount()));
 			reciever.setBalance(reciever.getBalance().add(request.getAmount()));
-			// as object are new so we need to update in DB
-			setAccount(sender);
-			setAccount(reciever);
 			return TransResponseDto.builder().withReciever(reciever).withSender(sender).build();
 		} finally {
 			stampedLock.unlockWrite(stemp);
 		}
 	}
 
-	private void setAccount(AccountModel sender) {
-		DataUtils.getInstance().getAccountData().put(sender.getId(), sender);
-	}
-
-	// Will return new account objects (stream API is immutable (java 8))
-	private AccountModel getAccount(final String fromAccount) {
+	private AccountModel getAccount(final String fromAccount) throws DataNotFoundException {
 		return DataUtils.getInstance().getAccountData().values().stream()
 				.filter(x -> x.getId().equals(fromAccount)).findAny()
 				.orElseThrow(() -> new DataNotFoundException(

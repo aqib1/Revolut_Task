@@ -2,6 +2,8 @@ package com.revolut.moneytransfer.dao.user;
 
 import java.util.Collection;
 
+import com.revolut.moneytransfer.exception.DataDuplicationException;
+import com.revolut.moneytransfer.exception.DataNotFoundException;
 import com.revolut.moneytransfer.models.UserModel;
 
 /**
@@ -21,14 +23,14 @@ public interface UserDao {
 	UserModel getById(String id);
 
 	// Create new user and returned newly created user
-	UserModel create(UserModel user);
+	UserModel create(UserModel user) throws DataDuplicationException;
 
 	// Update user and return updated user
-	UserModel update(UserModel user);
+	UserModel update(UserModel user) throws DataNotFoundException;
 
 	// Check is user exists by id
-	boolean exists(String id);
+	boolean exists(String id) throws DataNotFoundException;
 
 	// Delete user by id
-	UserModel delete(String id);
+	UserModel delete(String id) throws DataNotFoundException;
 }
