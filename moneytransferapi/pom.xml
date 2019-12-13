@@ -16,6 +16,10 @@
 		<javax.inject.version>1</javax.inject.version>
 		<codehaus.version>1.2.1</codehaus.version>
 		<maven.compiler.version>3.6.1</maven.compiler.version>
+		<mockito.version>1.9.5</mockito.version>
+		<junit.version>4.12</junit.version>
+		<cucumber.junit.version>4.5.4</cucumber.junit.version>
+		<cucumber.java.version>4.5.4</cucumber.java.version>
 	</properties>
 
 	<dependencies>
@@ -47,6 +51,32 @@
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
 			<version>${javax.inject.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>${mockito.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-junit -->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>${cucumber.junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-java -->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>${cucumber.java.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
