@@ -5,8 +5,8 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 import com.revolut.moneytransfer.dao.user.UserDao;
-import com.revolut.moneytransfer.dto.UserRequestDto;
-import com.revolut.moneytransfer.dto.ResponseDto;
+import com.revolut.moneytransfer.dto.requests.UserRequestDto;
+import com.revolut.moneytransfer.dto.responses.ResponseDto;
 import com.revolut.moneytransfer.dto.status.StatusType;
 import com.revolut.moneytransfer.models.UserModel;
 import com.revolut.moneytransfer.service.user.UserService;

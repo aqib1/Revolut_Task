@@ -2,6 +2,10 @@ package com.revolut.moneytransfer.dao.account;
 
 import java.util.Collection;
 
+import com.revolut.moneytransfer.dto.requests.DepositRequest;
+import com.revolut.moneytransfer.dto.requests.WithdrawRequestDto;
+import com.revolut.moneytransfer.dto.responses.DepositResponse;
+import com.revolut.moneytransfer.dto.responses.WithdrawResponseDto;
 import com.revolut.moneytransfer.models.AccountModel;
 
 /**
@@ -31,4 +35,10 @@ public interface AccountDao {
 
 	// Delete account by id
 	AccountModel delete(String id);
+	
+	// Withdraw amount from account
+	WithdrawResponseDto withDraw(WithdrawRequestDto withdrawRequestDto);
+
+	// Deposit amount from account
+	DepositResponse deposit(DepositRequest depositRequest);
 }

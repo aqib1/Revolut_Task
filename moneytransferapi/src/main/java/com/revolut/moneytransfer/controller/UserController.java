@@ -17,7 +17,7 @@ import java.util.Objects;
 import com.google.gson.Gson;
 import com.revolut.moneytransfer.dagger2.components.DaggerUserServiceComponent;
 import com.revolut.moneytransfer.dagger2.components.UserServiceComponent;
-import com.revolut.moneytransfer.dto.UserRequestDto;
+import com.revolut.moneytransfer.dto.requests.UserRequestDto;
 import com.revolut.moneytransfer.service.user.UserService;
 import com.revolut.moneytransfer.utils.Helper;
 

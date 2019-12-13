@@ -1,4 +1,4 @@
-package com.revolut.moneytransfer.dto;
+package com.revolut.moneytransfer.dto.responses;
 
 import com.google.gson.JsonElement;
 import com.revolut.moneytransfer.dto.status.StatusType;

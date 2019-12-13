@@ -12,6 +12,7 @@ import com.revolut.moneytransfer.controller.UserController;
 import com.revolut.moneytransfer.exception.BadRequestParamsException;
 import com.revolut.moneytransfer.exception.DataDuplicationException;
 import com.revolut.moneytransfer.exception.DataNotFoundException;
+import com.revolut.moneytransfer.exception.InvalidAmountException;
 import com.revolut.moneytransfer.exception.InvalidRequestException;
 import com.revolut.moneytransfer.exceptionadvice.ExceptionAdvice;
 import com.revolut.moneytransfer.utils.ExceptionUtility;
@@ -73,6 +74,10 @@ public class SparkApp {
 				// Creating advice for DataDuplicationException
 				.exceptionAdvice(
 						ExceptionUtility.builder().withException(DataDuplicationException.class)
+								.withStatus(HttpStatus.EXPECTATION_FAILED_417).build())
+				// Creating advice for InvalidAmountException
+				.exceptionAdvice(
+						ExceptionUtility.builder().withException(InvalidAmountException.class)
 								.withStatus(HttpStatus.EXPECTATION_FAILED_417).build());
 		return this;
 	}
@@ -95,7 +100,8 @@ public class SparkApp {
 		// Account controller API registrations
 		AccountController.getInstance().registerGetAllAccountAPI().registerGetAccountByIdAPI()
 				.registerPostCreateAccountAPI().registerDeleteAccountAPI()
-				.registerUpdateAccountAPI().registerCheckAccountAPI();
+				.registerUpdateAccountAPI().registerCheckAccountAPI().registerWithdrawAPI()
+				.registerDepositAPI();
 		return this;
 	}
 

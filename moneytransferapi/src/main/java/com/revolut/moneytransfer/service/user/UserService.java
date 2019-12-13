@@ -1,7 +1,7 @@
 package com.revolut.moneytransfer.service.user;
 
-import com.revolut.moneytransfer.dto.UserRequestDto;
-import com.revolut.moneytransfer.dto.ResponseDto;
+import com.revolut.moneytransfer.dto.requests.UserRequestDto;
+import com.revolut.moneytransfer.dto.responses.ResponseDto;
 
 /**
  * <p>

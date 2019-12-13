@@ -1,13 +1,19 @@
 package com.revolut.moneytransfer.dao.account.Impl;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.locks.StampedLock;
 
 import com.revolut.moneytransfer.dao.account.AccountDao;
+import com.revolut.moneytransfer.dto.requests.DepositRequest;
+import com.revolut.moneytransfer.dto.requests.WithdrawRequestDto;
+import com.revolut.moneytransfer.dto.responses.DepositResponse;
+import com.revolut.moneytransfer.dto.responses.WithdrawResponseDto;
 import com.revolut.moneytransfer.exception.DataDuplicationException;
 import com.revolut.moneytransfer.exception.DataNotFoundException;
+import com.revolut.moneytransfer.exception.InvalidAmountException;
 import com.revolut.moneytransfer.models.AccountModel;
 import com.revolut.moneytransfer.utils.data.DataUtils;
 
@@ -133,13 +139,16 @@ public class AccountDaoImpl implements AccountDao {
 	 */
 	@Override
 	public AccountModel create(AccountModel account) {
-		// Check is account already exists and throw exception
-		if (accountData.containsKey(account.getId()))
-			throw new DataDuplicationException(
-					"Account already exists against id [" + account.getId() + "]");
 		// Acquire a write lock
 		long stemp = stampedLock.writeLock();
 		try {
+			// Check is account already exists and throw exception
+			if (accountData.containsKey(account.getId()))
+				throw new DataDuplicationException(
+						"Account already exists against id [" + account.getId() + "]");
+			if (!DataUtils.getInstance().getUserData().containsKey(account.getUserId()))
+				throw new IllegalArgumentException("User id not exists in database");
+
 			accountData.put(account.getId(), account);
 		} finally {
 			stampedLock.unlockWrite(stemp);
@@ -157,10 +166,16 @@ public class AccountDaoImpl implements AccountDao {
 	 */
 	@Override
 	public AccountModel update(AccountModel account) {
-		if (!accountData.containsKey(account.getId()))
-			throw new DataNotFoundException(
-					"Account Id [" + account.getId() + "] not exists in database");
-		accountData.put(account.getId(), account);
+		// Acquire a write lock
+		long stemp = stampedLock.writeLock();
+		try {
+			if (!accountData.containsKey(account.getId()))
+				throw new DataNotFoundException(
+						"Account Id [" + account.getId() + "] not exists in database");
+			accountData.put(account.getId(), account);
+		} finally {
+			stampedLock.unlockWrite(stemp);
+		}
 		return account;
 	}
 
@@ -172,7 +187,19 @@ public class AccountDaoImpl implements AccountDao {
 	public boolean exists(String id) {
 		if (!accountData.containsKey(id))
 			throw new DataNotFoundException("Account Id [" + id + "] not exists in database");
-		return accountData.containsKey(id);
+		// return zero if it acquire by a write lock (exclusive locked)
+		long stamp = stampedLock.tryOptimisticRead();
+		// Synchronization overhead is very low if validate() succeeds
+		// Always return true if stamp is non zero (as not acquired by write lock)
+		if (stampedLock.validate(stamp))
+			return accountData.containsKey(id);
+		// If write lock is acquired then we will apply read lock
+		stamp = stampedLock.readLock();
+		try {
+			return accountData.containsKey(id);
+		} finally {
+			stampedLock.unlockRead(stamp);
+		}
 	}
 
 	/**
@@ -185,9 +212,64 @@ public class AccountDaoImpl implements AccountDao {
 	 */
 	@Override
 	public AccountModel delete(String id) {
-		if (!accountData.containsKey(id))
-			throw new DataNotFoundException("Account Id [" + id + "] not exists in database");
-		return accountData.remove(id);
+		long stemp = stampedLock.writeLock();
+		try {
+			if (!accountData.containsKey(id))
+				throw new DataNotFoundException("Account Id [" + id + "] not exists in database");
+			return accountData.remove(id);
+		} finally {
+			stampedLock.unlockWrite(stemp);
+		}
+	}
+
+	/**
+	 * <p>
+	 * This method is used to withdraw amount from account
+	 * </p>
+	 * 
+	 * @param id
+	 * @return {@link WithdrawResponseDto}
+	 */
+	@Override
+	public WithdrawResponseDto withDraw(WithdrawRequestDto withdrawRequestDto) {
+		long stemp = stampedLock.writeLock();
+		try {
+			if (!accountData.containsKey(withdrawRequestDto.getAccountId())) {
+				throw new DataNotFoundException("Account Id [" + withdrawRequestDto.getAccountId()
+						+ "] not exists in database");
+			}
+			AccountModel account = accountData.get(withdrawRequestDto.getAccountId());
+			if (account.getBalance().compareTo(withdrawRequestDto.getAmount()) < 0)
+				throw new InvalidAmountException(
+						"Invalid amount, you do not have sufficient balance");
+			if (withdrawRequestDto.getAmount().compareTo(BigDecimal.ZERO) <= 0)
+				throw new InvalidAmountException(
+						"Invalid amount, negative or zero value not acceptable");
+			account.setBalance(account.getBalance().subtract(withdrawRequestDto.getAmount()));
+			return new WithdrawResponseDto().withDrawAmount(withdrawRequestDto.getAmount())
+					.currentAmount(account.getBalance());
+		} finally {
+			stampedLock.unlockWrite(stemp);
+		}
+	}
+
+	@Override
+	public DepositResponse deposit(DepositRequest depositRequest) {
+		long stemp = stampedLock.writeLock();
+		try {
+			if (!accountData.containsKey(depositRequest.getAccountId()))
+				throw new DataNotFoundException("Account Id [" + depositRequest.getAccountId()
+						+ "] not exists in database");
+			if (depositRequest.getAmount().compareTo(BigDecimal.ZERO) <= 0)
+				throw new InvalidAmountException(
+						"Invalid amount, negative or zero value not acceptable");
+			AccountModel account = accountData.get(depositRequest.getAccountId());
+			account.setBalance(account.getBalance().add(depositRequest.getAmount()));
+			return new DepositResponse().currentAmount(account.getBalance())
+					.depositAmount(depositRequest.getAmount());
+		} finally {
+			stampedLock.unlockWrite(stemp);
+		}
 	}
 
 	// Double check locking singleton pattern
@@ -199,4 +281,5 @@ public class AccountDaoImpl implements AccountDao {
 			}
 		return accountdaoImpl;
 	}
+
 }

@@ -5,18 +5,28 @@ import java.util.Currency;
 import java.util.Objects;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * @author AQIB JAVED
+ * @since 12/13/2019
+ * @version 1.0
+ */
 @Getter
+@Setter
 @ToString
 public class AccountModel {
 
 	private String id;
 	private String accountTitle;
-	private BigDecimal balance;
+	private volatile BigDecimal balance;
 	private Currency currency;
 	private String userId;
 
+	/**
+	 * @param builder
+	 */
 	private AccountModel(Builder builder) {
 		this.id = builder.id;
 		this.accountTitle = builder.accountTitle;
@@ -46,7 +56,8 @@ public class AccountModel {
 		if (this == obj)
 			return true;
 		AccountModel accountModel = (AccountModel) obj;
-		return accountModel.id.equals(this.id) && accountModel.accountTitle.equals(this.accountTitle);
+		return accountModel.id.equals(this.id)
+				&& accountModel.accountTitle.equals(this.accountTitle);
 	}
 
 	/**
@@ -69,31 +80,54 @@ public class AccountModel {
 
 		}
 
+		/**
+		 * @param id
+		 * @return
+		 */
 		public Builder withId(String id) {
 			this.id = id;
 			return this;
 		}
 
+		/**
+		 * @param accountTitle
+		 * @return
+		 */
 		public Builder withAccountTitle(String accountTitle) {
 			this.accountTitle = accountTitle;
 			return this;
 		}
 
+		/**
+		 * @param balance
+		 * @return
+		 */
 		public Builder withBalance(BigDecimal balance) {
 			this.balance = balance;
 			return this;
 		}
 
+		/**
+		 * @param currency
+		 * @return
+		 */
 		public Builder withCurrency(Currency currency) {
 			this.currency = currency;
 			return this;
 		}
 
+		/**
+		 * @param userId
+		 * @return
+		 */
 		public Builder withUserId(String userId) {
 			this.userId = userId;
 			return this;
 		}
 
+		/**
+		 * @return
+		 */
 		public AccountModel build() {
 			return new AccountModel(this);
 		}

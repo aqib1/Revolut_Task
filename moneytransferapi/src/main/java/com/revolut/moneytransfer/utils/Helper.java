@@ -3,8 +3,10 @@ package com.revolut.moneytransfer.utils;
 import java.util.Objects;
 
 import com.google.gson.Gson;
-import com.revolut.moneytransfer.dto.AccountRequestDto;
-import com.revolut.moneytransfer.dto.UserRequestDto;
+import com.revolut.moneytransfer.dto.requests.AccountRequestDto;
+import com.revolut.moneytransfer.dto.requests.DepositRequest;
+import com.revolut.moneytransfer.dto.requests.UserRequestDto;
+import com.revolut.moneytransfer.dto.requests.WithdrawRequestDto;
 import com.revolut.moneytransfer.exception.BadRequestParamsException;
 import com.revolut.moneytransfer.exception.InvalidRequestException;
 
@@ -38,6 +40,8 @@ public class Helper {
 	public static final String DELETE_ACCOUNT_BY_ID = ACCOUNT_API + "/:id";
 	public static final String PUT_ACCOUNT_UPDATE = ACCOUNT_API + "/";
 	public static final String OPTION_ACCOUNT_EXIST = ACCOUNT_API + "/:id";
+	public static final String POST_WITHDRAW = ACCOUNT_API + "/withdraw/";
+	public static final String POST_DEPOSIT = ACCOUNT_API + "/deposit/";
 
 	/************ API properties ***********/
 	public static final String RESPONSE_TYPE_JSON = "application/json";
@@ -85,6 +89,9 @@ public class Helper {
 			throw new BadRequestParamsException("Request does not contain USER[lastName]");
 	}
 
+	/**
+	 * @param req
+	 */
 	public static void validateAccount(AccountRequestDto req) {
 		if (Objects.isNull(req) || Objects.isNull(req.getAccount()))
 			throw new InvalidRequestException("Request cannot be null");
@@ -100,7 +107,36 @@ public class Helper {
 			throw new BadRequestParamsException("Request does not contain Account[currency]");
 	}
 
+	/**
+	 * @param obj
+	 * @return
+	 */
 	public static String getJson(Object obj) {
 		return GSON.toJson(obj);
+	}
+
+	/**
+	 * @param withdrawRequestDto
+	 */
+	public static void validateWithDrawRequestDto(WithdrawRequestDto withdrawRequestDto) {
+		if (Objects.isNull(withdrawRequestDto))
+			throw new InvalidRequestException("Request cannot be null");
+		if (isNullOrEmptyString(withdrawRequestDto.getAccountId()))
+			throw new BadRequestParamsException("Request does not contain Account[id]");
+		if (Objects.isNull(withdrawRequestDto.getAmount()))
+			throw new BadRequestParamsException("Request does not contain Account[amount]");
+	}
+
+	/**
+	 * @param deposit
+	 */
+	public static void validateDepositRequest(DepositRequest deposit) {
+		if (Objects.isNull(deposit))
+			throw new InvalidRequestException("Request cannot be null");
+		if (isNullOrEmptyString(deposit.getAccountId()))
+			throw new BadRequestParamsException("Request does not contain Account[id]");
+		if (Objects.isNull(deposit.getAmount()))
+			throw new BadRequestParamsException("Request does not contain Account[amount]");
+
 	}
 }

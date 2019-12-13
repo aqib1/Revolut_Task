@@ -130,13 +130,13 @@ public class UserDaoImpl implements UserDao {
 	 */
 	@Override
 	public UserModel create(UserModel user) {
-		// Check is user already exists and throw exception
-		if (userData.containsKey(user.getId()))
-			throw new DataDuplicationException(
-					"User already exists against id [" + user.getId() + "]");
 		// Acquire a write lock
 		long stemp = stampedLock.writeLock();
+		// Check is user already exists and throw exception
 		try {
+			if (userData.containsKey(user.getId()))
+				throw new DataDuplicationException(
+						"User already exists against id [" + user.getId() + "]");
 			userData.put(user.getId(), user);
 		} finally {
 			stampedLock.unlockWrite(stemp);
@@ -154,10 +154,16 @@ public class UserDaoImpl implements UserDao {
 	 */
 	@Override
 	public UserModel update(UserModel user) {
-		if (!userData.containsKey(user.getId()))
-			throw new DataNotFoundException(
-					"User Id [" + user.getId() + "] not exists in database");
-		userData.put(user.getId(), user);
+		// Acquire a write lock
+		long stemp = stampedLock.writeLock();
+		try {
+			if (!userData.containsKey(user.getId()))
+				throw new DataNotFoundException(
+						"User Id [" + user.getId() + "] not exists in database");
+			userData.put(user.getId(), user);
+		} finally {
+			stampedLock.unlockWrite(stemp);
+		}
 		return user;
 	}
 
@@ -169,7 +175,20 @@ public class UserDaoImpl implements UserDao {
 	public boolean exists(String id) {
 		if (!userData.containsKey(id))
 			throw new DataNotFoundException("User Id [" + id + "] not exists in database");
-		return userData.containsKey(id);
+		// return zero if it acquire by a write lock (exclusive locked)
+		long stamp = stampedLock.tryOptimisticRead();
+		// Synchronization overhead is very low if validate() succeeds
+		// Always return true if stamp is non zero (as not acquired by write lock)
+		if (stampedLock.validate(stamp))
+			return userData.containsKey(id);
+		// Only in the case when write lock is acquired we need to apply read lock
+		stamp = stampedLock.readLock();
+		try {
+			return userData.containsKey(id);
+		} finally {
+			stampedLock.unlockRead(stamp);
+		}
+
 	}
 
 	/**
@@ -182,9 +201,15 @@ public class UserDaoImpl implements UserDao {
 	 */
 	@Override
 	public UserModel delete(String id) {
+		// Acquire a write lock
+		long stemp = stampedLock.writeLock();
+		try {
 		if (!userData.containsKey(id))
 			throw new DataNotFoundException("User Id [" + id + "] not exists in database");
-		return userData.remove(id);
+			return userData.remove(id);
+		} finally {
+			stampedLock.unlockWrite(stemp);
+		}
 	}
 
 	// Double check locking singleton pattern

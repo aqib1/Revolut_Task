@@ -1,9 +1,15 @@
-package com.revolut.moneytransfer.dto;
+package com.revolut.moneytransfer.dto.requests;
 
 import com.revolut.moneytransfer.models.UserModel;
+
 import lombok.Getter;
 import lombok.ToString;
 
+/**
+ * @author AQIB JAVED
+ * @version 1.0
+ * @since 12/9/2019
+ */
 @Getter
 @ToString
 public class UserRequestDto {

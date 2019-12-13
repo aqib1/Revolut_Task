@@ -5,8 +5,10 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 import com.revolut.moneytransfer.dao.account.AccountDao;
-import com.revolut.moneytransfer.dto.AccountRequestDto;
-import com.revolut.moneytransfer.dto.ResponseDto;
+import com.revolut.moneytransfer.dto.requests.AccountRequestDto;
+import com.revolut.moneytransfer.dto.requests.DepositRequest;
+import com.revolut.moneytransfer.dto.requests.WithdrawRequestDto;
+import com.revolut.moneytransfer.dto.responses.ResponseDto;
 import com.revolut.moneytransfer.dto.status.StatusType;
 import com.revolut.moneytransfer.models.AccountModel;
 import com.revolut.moneytransfer.service.account.AccountService;
@@ -107,7 +109,7 @@ public class AccountServiceImpl implements AccountService {
 				.withMessage("Account for ID [%s] updated successfully", model.getId())
 				.withData(model).build();
 	}
-	
+
 	/**
 	 * <p>
 	 * check account exists against id
@@ -125,7 +127,7 @@ public class AccountServiceImpl implements AccountService {
 				.withMessage("Account for id [%s] exists ", id).withData(accountDao.exists(id))
 				.build();
 	}
-	
+
 	/**
 	 * <p>
 	 * delete account against id
@@ -146,4 +148,35 @@ public class AccountServiceImpl implements AccountService {
 				.withData(model).build();
 	}
 
+	/**
+	 * <p>
+	 * withdraw account
+	 * </p>
+	 * 
+	 * @param withdrawRequestDto
+	 * @return {@link ResponseDto}
+	 */
+	@Override
+	public ResponseDto withdraw(WithdrawRequestDto withdrawRequestDto) {
+		Helper.validateWithDrawRequestDto(withdrawRequestDto);
+		return ResponseDto.builder().withStatusType(StatusType.SUCCESS)
+				.withMessage("Amount [%s] withdraw successfully", withdrawRequestDto.getAmount())
+				.withData(accountDao.withDraw(withdrawRequestDto)).build();
+	}
+
+	/**
+	 * <p>
+	 * withdraw account
+	 * </p>
+	 * 
+	 * @param deposit
+	 * @return {@link ResponseDto}
+	 */
+	@Override
+	public ResponseDto deposit(DepositRequest deposit) {
+		Helper.validateDepositRequest(deposit);
+		return ResponseDto.builder().withStatusType(StatusType.SUCCESS)
+				.withMessage("Amount [%s] deposit successfully", deposit.getAmount())
+				.withData(accountDao.deposit(deposit)).build();
+	}
 }

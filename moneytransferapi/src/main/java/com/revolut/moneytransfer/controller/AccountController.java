@@ -5,6 +5,8 @@ import static com.revolut.moneytransfer.utils.Helper.GET_ACCOUNTS;
 import static com.revolut.moneytransfer.utils.Helper.GET_ACCOUNT_BY_ID;
 import static com.revolut.moneytransfer.utils.Helper.OPTION_ACCOUNT_EXIST;
 import static com.revolut.moneytransfer.utils.Helper.POST_ACCOUNT_CREATE;
+import static com.revolut.moneytransfer.utils.Helper.POST_DEPOSIT;
+import static com.revolut.moneytransfer.utils.Helper.POST_WITHDRAW;
 import static com.revolut.moneytransfer.utils.Helper.PUT_ACCOUNT_UPDATE;
 import static spark.Spark.delete;
 import static spark.Spark.get;
@@ -17,7 +19,9 @@ import java.util.Objects;
 import com.google.gson.Gson;
 import com.revolut.moneytransfer.dagger2.components.AccountServiceComponent;
 import com.revolut.moneytransfer.dagger2.components.DaggerAccountServiceComponent;
-import com.revolut.moneytransfer.dto.AccountRequestDto;
+import com.revolut.moneytransfer.dto.requests.AccountRequestDto;
+import com.revolut.moneytransfer.dto.requests.DepositRequest;
+import com.revolut.moneytransfer.dto.requests.WithdrawRequestDto;
 import com.revolut.moneytransfer.service.account.AccountService;
 import com.revolut.moneytransfer.utils.Helper;
 
@@ -129,6 +133,37 @@ public class AccountController {
 		return this;
 	}
 
+	/**
+	 * <p>
+	 * This method is used to register check withdraw API
+	 * </p>
+	 * 
+	 * @return {@link AccountController}
+	 */
+	public AccountController registerWithdrawAPI() {
+		post(POST_WITHDRAW, (request, response) -> {
+			return Helper.getJson(accountService
+					.withdraw(new Gson().fromJson(request.body(), WithdrawRequestDto.class)));
+		});
+		return this;
+	}
+
+	/**
+	 * <p>
+	 * This method is used to register check deposit API
+	 * </p>
+	 * 
+	 * @return {@link AccountController}
+	 */
+	public AccountController registerDepositAPI() {
+		post(POST_DEPOSIT, (request, response) -> {
+			return Helper.getJson(accountService
+					.deposit(new Gson().fromJson(request.body(), DepositRequest.class)));
+		});
+		return this;
+	}
+
+	// Double check locking
 	public static AccountController getInstance() {
 		if (Objects.isNull(accountController))
 			synchronized (AccountController.class) {

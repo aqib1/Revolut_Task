@@ -1,7 +1,9 @@
 package com.revolut.moneytransfer.service.account;
 
-import com.revolut.moneytransfer.dto.AccountRequestDto;
-import com.revolut.moneytransfer.dto.ResponseDto;
+import com.revolut.moneytransfer.dto.requests.AccountRequestDto;
+import com.revolut.moneytransfer.dto.requests.DepositRequest;
+import com.revolut.moneytransfer.dto.requests.WithdrawRequestDto;
+import com.revolut.moneytransfer.dto.responses.ResponseDto;
 
 /**
  * <p>
@@ -31,5 +33,11 @@ public interface AccountService {
 
 	// Delete account by id
 	ResponseDto delete(String id);
+
+	// Withdraw amount from account
+	ResponseDto withdraw(WithdrawRequestDto withdrawRequestDto);
+
+	// Deposit amount from account
+	ResponseDto deposit(DepositRequest deposit);
 
 }

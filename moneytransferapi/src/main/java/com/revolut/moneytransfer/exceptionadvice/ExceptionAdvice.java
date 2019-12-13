@@ -5,7 +5,7 @@ import static spark.Spark.exception;
 import java.util.Objects;
 
 import com.google.gson.Gson;
-import com.revolut.moneytransfer.dto.ResponseDto;
+import com.revolut.moneytransfer.dto.responses.ResponseDto;
 import com.revolut.moneytransfer.dto.status.StatusType;
 import com.revolut.moneytransfer.utils.ExceptionUtility;
 
