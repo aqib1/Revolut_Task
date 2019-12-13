@@ -42,6 +42,7 @@ public class Helper {
 	public static final String OPTION_ACCOUNT_EXIST = ACCOUNT_API + "/:id";
 	public static final String POST_WITHDRAW = ACCOUNT_API + "/withdraw/";
 	public static final String POST_DEPOSIT = ACCOUNT_API + "/deposit/";
+	public static final String GET_ACCOUNT_BALANCE = ACCOUNT_API + "/balance/:id";
 
 	/****************** Transaction API *******************/
 	public static final String POST_TRANSACTION = "/trans/";

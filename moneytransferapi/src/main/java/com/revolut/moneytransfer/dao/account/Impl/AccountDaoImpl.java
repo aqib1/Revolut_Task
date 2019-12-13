@@ -283,6 +283,32 @@ public class AccountDaoImpl implements AccountDao {
 		}
 	}
 
+	/**
+	 * <p>
+	 * This method is used to get amount from account
+	 * </p>
+	 * 
+	 * @param id
+	 * @return {@link BigDecimal}
+	 */
+	@Override
+	public BigDecimal balance(String id) throws DataNotFoundException {
+		if (!accountData.containsKey(id))
+			throw new DataNotFoundException("Account Id [" + id + "] not exists in database");
+		// return zero if it acquire by a write lock (exclusive locked)
+		long stamp = stampedLock.tryOptimisticRead();
+		// Always return true if stamp is non zero (as not acquired by write lock)
+		if (stampedLock.validate(stamp))
+			return accountData.get(id).getBalance();
+		// If write lock is acquired then we will apply read lock
+		stamp = stampedLock.readLock();
+		try {
+			return accountData.get(id).getBalance();
+		} finally {
+			stampedLock.unlockRead(stamp);
+		}
+	}
+
 	// Double check locking singleton pattern
 	public static AccountDaoImpl getInstance() {
 		if (Objects.isNull(accountdaoImpl))
@@ -292,5 +318,4 @@ public class AccountDaoImpl implements AccountDao {
 			}
 		return accountdaoImpl;
 	}
-
 }

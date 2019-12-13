@@ -1,5 +1,6 @@
 package com.revolut.moneytransfer.dao.account;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 
 import com.revolut.moneytransfer.dto.requests.DepositRequest;
@@ -47,4 +48,7 @@ public interface AccountDao {
 	// Deposit amount from account
 	DepositResponse deposit(DepositRequest depositRequest)
 			throws DataNotFoundException, InvalidAmountException;
+
+	// get balance against account id
+	BigDecimal balance(String id) throws DataNotFoundException;
 }

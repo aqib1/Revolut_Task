@@ -179,4 +179,22 @@ public class AccountServiceImpl implements AccountService {
 				.withMessage("Amount [%s] deposit successfully", deposit.getAmount())
 				.withData(accountDao.deposit(deposit)).build();
 	}
+
+	/**
+	 * <p>
+	 * balance account
+	 * </p>
+	 * 
+	 * @param id
+	 * @return {@link ResponseDto}
+	 */
+	@Override
+	public ResponseDto balance(String id) {
+		if (Helper.isNullOrEmptyString(id)) {
+			throw new IllegalArgumentException("Account id can't be null or empty");
+		}
+		return ResponseDto.builder().withStatusType(StatusType.SUCCESS)
+				.withMessage("Amount recieved successfully against account [%s]", id)
+				.withData(accountDao.balance(id)).build();
+	}
 }

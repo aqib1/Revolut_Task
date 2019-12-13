@@ -39,5 +39,7 @@ public interface AccountService {
 
 	// Deposit amount from account
 	ResponseDto deposit(DepositRequest deposit);
-
+	
+	// Get balance against account id
+	ResponseDto balance(String id);
 }

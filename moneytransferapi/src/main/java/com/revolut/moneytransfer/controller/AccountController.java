@@ -2,6 +2,7 @@ package com.revolut.moneytransfer.controller;
 
 import static com.revolut.moneytransfer.utils.Helper.DELETE_ACCOUNT_BY_ID;
 import static com.revolut.moneytransfer.utils.Helper.GET_ACCOUNTS;
+import static com.revolut.moneytransfer.utils.Helper.GET_ACCOUNT_BALANCE;
 import static com.revolut.moneytransfer.utils.Helper.GET_ACCOUNT_BY_ID;
 import static com.revolut.moneytransfer.utils.Helper.OPTION_ACCOUNT_EXIST;
 import static com.revolut.moneytransfer.utils.Helper.POST_ACCOUNT_CREATE;
@@ -160,6 +161,21 @@ public class AccountController {
 			return Helper.getJson(accountService
 					.deposit(new Gson().fromJson(request.body(), DepositRequest.class)));
 		});
+		return this;
+	}
+
+	/**
+	 * <p>
+	 * This method is used to register get amount API
+	 * </p>
+	 * 
+	 * @return {@link AccountController}
+	 */
+	public AccountController registerAmountAPI() {
+		get(GET_ACCOUNT_BALANCE, (request, response) -> {
+			return Helper.getJson(accountService.balance(request.params(":id")));
+		});
+
 		return this;
 	}
 

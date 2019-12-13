@@ -102,7 +102,7 @@ public class SparkApp {
 		AccountController.getInstance().registerGetAllAccountAPI().registerGetAccountByIdAPI()
 				.registerPostCreateAccountAPI().registerDeleteAccountAPI()
 				.registerUpdateAccountAPI().registerCheckAccountAPI().registerWithdrawAPI()
-				.registerDepositAPI();
+				.registerDepositAPI().registerAmountAPI();
 		// Transaction controller API registrations
 		TransactionController.getInstance().registerTransactionAPI();
 		return this;
