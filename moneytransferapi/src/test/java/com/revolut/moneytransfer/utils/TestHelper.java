@@ -8,6 +8,7 @@ import java.util.Currency;
 import com.revolut.moneytransfer.dto.requests.AccountRequestDto;
 import com.revolut.moneytransfer.dto.requests.DepositRequest;
 import com.revolut.moneytransfer.dto.requests.TransRequestDto;
+import com.revolut.moneytransfer.dto.requests.UserRequestDto;
 import com.revolut.moneytransfer.dto.requests.WithdrawRequestDto;
 import com.revolut.moneytransfer.dto.responses.DepositResponse;
 import com.revolut.moneytransfer.dto.responses.ResponseDto;
@@ -189,6 +190,13 @@ public class TestHelper {
 	public static ResponseDto getBalanceResponse() {
 		return ResponseDto.builder().withStatusType(StatusType.SUCCESS).withData(1000)
 				.withMessage("Success").build();
+	}
+
+	/**
+	 * @return
+	 */
+	public static UserRequestDto getUserRequest() {
+		return UserRequestDto.builder().withUser(getTestUser()).build();
 	}
 
 }
