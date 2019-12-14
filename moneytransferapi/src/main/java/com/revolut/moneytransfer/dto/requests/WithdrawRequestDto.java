@@ -17,7 +17,7 @@ public class WithdrawRequestDto {
 		this.amount = builder.amount;
 	}
 	
-	public static Builder build() {
+	public static Builder builder() {
 		return new Builder();
 	}
 
@@ -39,7 +39,7 @@ public class WithdrawRequestDto {
 			return this;
 		}
 
-		public WithdrawRequestDto builder() {
+		public WithdrawRequestDto build() {
 			return new WithdrawRequestDto(this);
 		}
 	}

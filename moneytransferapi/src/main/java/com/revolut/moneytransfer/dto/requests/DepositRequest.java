@@ -16,7 +16,7 @@ public class DepositRequest {
 		this.amount = builder.amount;
 	}
 
-	public static Builder build() {
+	public static Builder builder() {
 		return new Builder();
 	}
 
@@ -38,7 +38,7 @@ public class DepositRequest {
 			return this;
 		}
 
-		public DepositRequest builder() {
+		public DepositRequest build() {
 			return new DepositRequest(this);
 		}
 	}

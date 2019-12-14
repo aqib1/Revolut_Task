@@ -248,8 +248,8 @@ public class AccountDaoImpl implements AccountDao {
 				throw new InvalidAmountException(
 						"Invalid amount, negative or zero value not acceptable");
 			account.setBalance(account.getBalance().subtract(withdrawRequestDto.getAmount()));
-			return new WithdrawResponseDto().withDrawAmount(withdrawRequestDto.getAmount())
-					.currentAmount(account.getBalance());
+			return WithdrawResponseDto.builder().withDrawAmount(withdrawRequestDto.getAmount())
+					.currentAmount(account.getBalance()).build();
 		} finally {
 			stampedLock.unlockWrite(stemp);
 		}
@@ -276,8 +276,8 @@ public class AccountDaoImpl implements AccountDao {
 						"Invalid amount, negative or zero value not acceptable");
 			AccountModel account = accountData.get(depositRequest.getAccountId());
 			account.setBalance(account.getBalance().add(depositRequest.getAmount()));
-			return new DepositResponse().currentAmount(account.getBalance())
-					.depositAmount(depositRequest.getAmount());
+			return DepositResponse.builder().withCurrentAmount(account.getBalance())
+					.withDepositAmount(depositRequest.getAmount()).build();
 		} finally {
 			stampedLock.unlockWrite(stemp);
 		}

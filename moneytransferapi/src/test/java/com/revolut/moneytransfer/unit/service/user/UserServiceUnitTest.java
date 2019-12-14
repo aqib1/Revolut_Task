@@ -1,4 +1,4 @@
-package com.revolut.moneytransfer.service.user.unit;
+package com.revolut.moneytransfer.unit.service.user;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -30,6 +30,12 @@ public class UserServiceUnitTest {
 
 	@Before
 	public void init() {
+		mockGetUserById();
+		mockGetAllUsers();
+		mockCreateUser();
+		mockUpdateUser();
+		mockTestExists();
+		mockTestDelete();
 	}
 
 	// when-then
@@ -40,7 +46,6 @@ public class UserServiceUnitTest {
 
 	@Test
 	public void testGetById() {
-		mockGetUserById();
 		UserModel userModel = userDao.getById("1");
 		Mockito.verify(userDao, Mockito.times(1)).getById(Mockito.anyString());
 		assertEquals(userModel.getId(), "1");
@@ -68,7 +73,6 @@ public class UserServiceUnitTest {
 
 	@Test
 	public void testGetAll() {
-		mockGetAllUsers();
 		Iterator<UserModel> users = userDao.getAll().iterator();
 		Mockito.verify(userDao, Mockito.times(1)).getAll();
 		UserModel user = users.next();
@@ -98,7 +102,6 @@ public class UserServiceUnitTest {
 
 	@Test
 	public void testCreateUser() {
-		mockCreateUser();
 		UserModel userModel = userDao.create(TestHelper.getTestUser());
 		Mockito.verify(userDao, Mockito.times(1)).create(Mockito.any(UserModel.class));
 		assertEquals(userModel.getId(), "1");
@@ -128,7 +131,6 @@ public class UserServiceUnitTest {
 
 	@Test
 	public void testUpdateUser() {
-		mockUpdateUser();
 		UserModel userModel = userDao.update(TestHelper.getTestUser());
 		Mockito.verify(userDao, Mockito.times(1)).update(Mockito.any(UserModel.class));
 		assertEquals(userModel.getId(), "1");
@@ -153,12 +155,11 @@ public class UserServiceUnitTest {
 	}
 
 	private void mockTestExists() {
-		Mockito.when(userDao.exists(Mockito.anyString())).thenReturn(true);
+		Mockito.when(userDao.exists(Mockito.anyString())).thenReturn(Boolean.TRUE);
 	}
 
 	@Test
 	public void testExists() {
-		mockTestExists();
 		assertTrue(userDao.exists("1"));
 		Mockito.verify(userDao, Mockito.times(1)).exists(Mockito.anyString());
 	}
@@ -181,7 +182,6 @@ public class UserServiceUnitTest {
 	// delete API will delete and send deleted object
 	@Test
 	public void testDelete() {
-		mockTestDelete();
 		UserModel userModel = userDao.delete("1");
 		Mockito.verify(userDao, Mockito.times(1)).delete(Mockito.anyString());
 		assertEquals(userModel.getId(), "1");
