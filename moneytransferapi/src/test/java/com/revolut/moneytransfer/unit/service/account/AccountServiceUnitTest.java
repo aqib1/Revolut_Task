@@ -1,11 +1,6 @@
 package com.revolut.moneytransfer.unit.service.account;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Currency;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,274 +9,214 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.revolut.moneytransfer.dao.account.AccountDao;
+import com.revolut.moneytransfer.dto.requests.AccountRequestDto;
 import com.revolut.moneytransfer.dto.requests.DepositRequest;
 import com.revolut.moneytransfer.dto.requests.WithdrawRequestDto;
-import com.revolut.moneytransfer.dto.responses.DepositResponse;
-import com.revolut.moneytransfer.dto.responses.WithdrawResponseDto;
-import com.revolut.moneytransfer.exception.DataNotFoundException;
-import com.revolut.moneytransfer.exception.InvalidAmountException;
-import com.revolut.moneytransfer.models.AccountModel;
+import com.revolut.moneytransfer.dto.responses.ResponseDto;
+import com.revolut.moneytransfer.dto.status.StatusType;
+import com.revolut.moneytransfer.exception.BadRequestParamsException;
+import com.revolut.moneytransfer.exception.InvalidRequestException;
+import com.revolut.moneytransfer.service.account.AccountService;
 import com.revolut.moneytransfer.utils.TestHelper;
 
 /**
  * @author AQIB JAVED
- * @since 12/14/2019
+ * @since 12/15/2019
  * @version 1.0
  */
 @RunWith(MockitoJUnitRunner.class)
 public class AccountServiceUnitTest {
 
 	@Mock
-	private AccountDao accountDao;
+	private AccountService accountService;
 
 	@Before
 	public void init() {
 		mockGetAll();
-		mockTestGetById();
-		mockTestCreate();
-		mockTestUpdate();
-		mockTestExists();
-		mockTestDelete();
-		mockTestWithdraw();
-		mockTestDeposit();
+		mockGetById();
+		mockCreate();
+		mockUpdate();
+		mockExists();
+		mockdelete();
+		mockWithdraw();
+		mockDeposit();
+		mockBalance();
+	}
+
+	private void mockBalance() {
+		Mockito.when(accountService.balance(Mockito.anyString()))
+				.thenReturn(TestHelper.getBalanceResponse());
+	}
+
+	private void mockDeposit() {
+		Mockito.when(accountService.deposit(Mockito.any(DepositRequest.class)))
+				.thenReturn(TestHelper.getResponse());
+	}
+
+	private void mockWithdraw() {
+		Mockito.when(accountService.withdraw(Mockito.any(WithdrawRequestDto.class)))
+				.thenReturn(TestHelper.getResponse());
+	}
+
+	private void mockdelete() {
+		Mockito.when(accountService.delete(Mockito.anyString()))
+				.thenReturn(TestHelper.getResponse());
+
+	}
+
+	private void mockExists() {
+		Mockito.when(accountService.exists(Mockito.anyString()))
+				.thenReturn(TestHelper.getIsExistsResponse());
+
+	}
+
+	private void mockUpdate() {
+		Mockito.when(accountService.update(Mockito.any(AccountRequestDto.class)))
+				.thenReturn(TestHelper.getResponse());
+
+	}
+
+	private void mockCreate() {
+		Mockito.when(accountService.create(Mockito.any(AccountRequestDto.class)))
+				.thenReturn(TestHelper.getResponse());
+
 	}
 
 	private void mockGetAll() {
-		Mockito.when(accountDao.getAll()).thenReturn(TestHelper.getTestAllAccount());
+		Mockito.when(accountService.getAll()).thenReturn(TestHelper.getResponse());
 	}
 
 	@Test
 	public void testGetAll() {
-		Collection<AccountModel> accounts = accountDao.getAll();
-		Mockito.verify(accountDao, Mockito.times(1)).getAll();
-		AccountModel account = accounts.iterator().next();
-		assertEquals(account.getAccountTitle(), "Test-Account");
-		assertEquals(account.getBalance(), BigDecimal.valueOf(10000));
-		assertEquals(account.getCurrency(), Currency.getInstance("USD"));
-		assertEquals(account.getId(), "ac11");
-		assertEquals(account.getUserId(), "1");
+		ResponseDto response = accountService.getAll();
+		Mockito.verify(accountService, Mockito.times(1)).getAll();
+		assertEquals(response.getStatusType(), StatusType.SUCCESS);
 	}
 
-	private void mockGetAllDataNotFoundException() {
-		Mockito.when(accountDao.getAll()).thenThrow(new DataNotFoundException());
-	}
-
-	@Test(expected = DataNotFoundException.class)
-	public void testGetAllDataNotFoundException() {
-		mockGetAllDataNotFoundException();
-		accountDao.getAll();
-		Mockito.verify(accountDao, Mockito.times(1)).getAll();
-	}
-
-	private void mockTestGetById() {
-		Mockito.when(accountDao.getById(Mockito.anyString()))
-				.thenReturn(TestHelper.getTestAccount());
+	private void mockGetById() {
+		Mockito.when(accountService.getById(Mockito.anyString()))
+				.thenReturn(TestHelper.getResponse());
 	}
 
 	@Test
 	public void testGetById() {
-		AccountModel account = accountDao.getById("ac11");
-		Mockito.verify(accountDao, Mockito.times(1)).getById(Mockito.anyString());
-		assertEquals(account.getAccountTitle(), "Test-Account");
-		assertEquals(account.getBalance(), BigDecimal.valueOf(10000));
-		assertEquals(account.getCurrency(), Currency.getInstance("USD"));
-		assertEquals(account.getId(), "ac11");
-		assertEquals(account.getUserId(), "1");
+		ResponseDto response = accountService.getById("1");
+		Mockito.verify(accountService, Mockito.times(1)).getById(Mockito.anyString());
+		assertEquals(response.getStatusType(), StatusType.SUCCESS);
 	}
 
-	private void mockTestGetByIdDataNotFoundException() {
-		Mockito.when(accountDao.getById(Mockito.anyString()))
-				.thenThrow(new DataNotFoundException());
+	private void mockGetByIdIllegalArgumentException() {
+		Mockito.when(accountService.getById(Mockito.anyString()))
+				.thenThrow(new IllegalArgumentException());
 	}
 
-	@Test(expected = DataNotFoundException.class)
-	public void testGetByIdDataNotFoundException() {
-		mockTestGetByIdDataNotFoundException();
-		accountDao.getById("ac11");
-		Mockito.verify(accountDao, Mockito.times(1)).getById(Mockito.anyString());
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetByIdIllegalArgumentException() {
+		mockGetByIdIllegalArgumentException();
+		accountService.getById(null);
+		Mockito.verify(accountService, Mockito.times(1)).getById(null);
 	}
 
-	private void mockTestCreate() {
-		Mockito.when(accountDao.create(Mockito.any(AccountModel.class)))
-				.thenReturn(TestHelper.getTestAccount());
-	}
-
-	// create method will create and return created account
 	@Test
 	public void testCreate() {
-		AccountModel account = accountDao.create(TestHelper.getTestAccount());
-		Mockito.verify(accountDao, Mockito.times(1)).create(Mockito.any(AccountModel.class));
-		assertEquals(account.getAccountTitle(), "Test-Account");
-		assertEquals(account.getBalance(), BigDecimal.valueOf(10000));
-		assertEquals(account.getCurrency(), Currency.getInstance("USD"));
-		assertEquals(account.getId(), "ac11");
-		assertEquals(account.getUserId(), "1");
+		ResponseDto response = accountService.create(TestHelper.getAccountRequest());
+		Mockito.verify(accountService, Mockito.times(1))
+				.create(Mockito.any(AccountRequestDto.class));
+		assertEquals(response.getStatusType(), StatusType.SUCCESS);
 	}
 
-	private void mockTestCreateDataNotFoundException() {
-		Mockito.when(accountDao.create(Mockito.any(AccountModel.class)))
-				.thenThrow(new DataNotFoundException());
+	private void mockCreateInvalidRequestException() {
+		Mockito.when(accountService.create(Mockito.any(AccountRequestDto.class)))
+				.thenThrow(new InvalidRequestException());
 	}
 
-	@Test(expected = DataNotFoundException.class)
-	public void testTestCreateDataNotFoundException() {
-		mockTestCreateDataNotFoundException();
-		accountDao.create(TestHelper.getTestAccount());
-		Mockito.verify(accountDao, Mockito.times(1)).create(Mockito.any(AccountModel.class));
+	@Test(expected = InvalidRequestException.class)
+	public void testCreateInvalidRequestException() {
+		mockCreateInvalidRequestException();
+		accountService.create(null);
+		Mockito.verify(accountService, Mockito.times(1)).create(null);
 	}
 
-	private void mockTestUpdate() {
-		Mockito.when(accountDao.update(Mockito.any(AccountModel.class)))
-				.thenReturn(TestHelper.getTestUpdateAccount());
+	private void mockCreateBadRequestParamsException() {
+		Mockito.when(accountService.create(Mockito.any(AccountRequestDto.class)))
+				.thenThrow(new BadRequestParamsException());
+	}
+
+	@Test(expected = BadRequestParamsException.class)
+	public void testCreateBadRequestParamsException() {
+		mockCreateBadRequestParamsException();
+		accountService.create(null);
+		Mockito.verify(accountService, Mockito.times(1)).create(null);
 	}
 
 	@Test
 	public void testUpdate() {
-		AccountModel account = accountDao.update(TestHelper.getTestAccount());
-		Mockito.verify(accountDao, Mockito.times(1)).update(Mockito.any(AccountModel.class));
-		assertEquals(account.getAccountTitle(), "Test-Account");
-		assertEquals(account.getBalance(), BigDecimal.valueOf(20000));
-		assertEquals(account.getCurrency(), Currency.getInstance("USD"));
-		assertEquals(account.getId(), "ac11");
-		assertEquals(account.getUserId(), "1");
-	}
-
-	private void mockTestUpdateDataNotFoundException() {
-		Mockito.when(accountDao.update(Mockito.any(AccountModel.class)))
-				.thenThrow(new DataNotFoundException());
-	}
-
-	@Test(expected = DataNotFoundException.class)
-	public void testUpdateDataNotFoundException() {
-		mockTestUpdateDataNotFoundException();
-		accountDao.update(TestHelper.getTestAccount());
-		Mockito.verify(accountDao, Mockito.times(1)).update(Mockito.any(AccountModel.class));
-	}
-
-	private void mockTestExists() {
-		Mockito.when(accountDao.exists(Mockito.anyString())).thenReturn(Boolean.TRUE);
+		ResponseDto response = accountService.update(TestHelper.getAccountRequest());
+		Mockito.verify(accountService, Mockito.times(1))
+				.update(Mockito.any(AccountRequestDto.class));
+		assertEquals(response.getStatusType(), StatusType.SUCCESS);
 	}
 
 	@Test
 	public void testExists() {
-		assertTrue(accountDao.exists("ac11"));
-		Mockito.verify(accountDao, Mockito.times(1)).exists(Mockito.anyString());
+		ResponseDto response = accountService.exists("1");
+		Mockito.verify(accountService, Mockito.times(1)).exists(Mockito.anyString());
+		assertEquals(response.getData().getAsString(), "true");
+		assertEquals(response.getStatusType(), StatusType.SUCCESS);
 	}
 
-	private void mockTestExistsDataNotFound() {
-		Mockito.when(accountDao.exists(Mockito.anyString())).thenThrow(new DataNotFoundException());
+	private void mockExistsIllegalArgumentException() {
+		Mockito.when(accountService.exists(Mockito.anyString()))
+				.thenThrow(new IllegalArgumentException());
 	}
 
-	@Test(expected = DataNotFoundException.class)
-	public void testExistsDataNotFound() {
-		mockTestExistsDataNotFound();
-		accountDao.exists("ac11");
-		Mockito.verify(accountDao, Mockito.times(1)).exists(Mockito.anyString());
+	@Test(expected = IllegalArgumentException.class)
+	public void testExistsIllegalArgumentException() {
+		mockExistsIllegalArgumentException();
+		accountService.exists(null);
+		Mockito.verify(accountService, Mockito.times(1)).exists(null);
 	}
 
-	private void mockTestDelete() {
-		Mockito.when(accountDao.delete(Mockito.anyString()))
-				.thenReturn(TestHelper.getTestDeleteAccount());
-	}
-
-	// delete API will delete and send deleted object
 	@Test
 	public void testDelete() {
-		AccountModel accountModel = accountDao.delete("1");
-		Mockito.verify(accountDao, Mockito.times(1)).delete(Mockito.anyString());
-		assertEquals(accountModel.getAccountTitle(), "Test-Account");
-		assertEquals(accountModel.getBalance(), BigDecimal.valueOf(10000));
-		assertEquals(accountModel.getCurrency(), Currency.getInstance("USD"));
-		assertEquals(accountModel.getId(), "ac11");
-		assertEquals(accountModel.getUserId(), "1");
+		ResponseDto response = accountService.delete("1");
+		Mockito.verify(accountService, Mockito.times(1)).delete(Mockito.anyString());
+		assertEquals(response.getStatusType(), StatusType.SUCCESS);
 	}
 
-	private void mockTestDeleteDataNotFound() {
-		Mockito.when(accountDao.delete(Mockito.anyString())).thenThrow(new DataNotFoundException());
+	private void mockDeleteIllegalArgumentException() {
+		Mockito.when(accountService.delete(Mockito.anyString()))
+				.thenThrow(new IllegalArgumentException());
 	}
 
-	@Test(expected = DataNotFoundException.class)
-	public void testDeleteDataNotFound() {
-		mockTestDeleteDataNotFound();
-		accountDao.delete("1");
-		Mockito.verify(accountDao, Mockito.times(1)).delete(Mockito.anyString());
-	}
-
-	private void mockTestWithdraw() {
-		Mockito.when(accountDao.withDraw(Mockito.any(WithdrawRequestDto.class)))
-				.thenReturn(TestHelper.getWithdrawResponse());
+	@Test(expected = IllegalArgumentException.class)
+	public void testDeleteIllegalArgumentException() {
+		mockDeleteIllegalArgumentException();
+		accountService.delete(null);
+		Mockito.verify(accountService, Mockito.times(1)).delete(null);
 	}
 
 	@Test
 	public void testWithdraw() {
-		WithdrawResponseDto request = accountDao.withDraw(TestHelper.getWithdrawRequestDto());
-		Mockito.verify(accountDao, Mockito.times(1))
-				.withDraw(Mockito.any(WithdrawRequestDto.class));
-		assertEquals(request.getCurrentAmount(), BigDecimal.valueOf(2000));
-		assertEquals(request.getWithDrawAmount(), BigDecimal.valueOf(1000));
-	}
-
-	private void mockTestWithdrawDataNotFoundException() {
-		Mockito.when(accountDao.withDraw(Mockito.any(WithdrawRequestDto.class)))
-				.thenThrow(new DataNotFoundException());
-	}
-
-	@Test(expected = DataNotFoundException.class)
-	public void testWithDrawDataNotFoundException() {
-		mockTestWithdrawDataNotFoundException();
-		accountDao.withDraw(TestHelper.getWithdrawRequestDto());
-		Mockito.verify(accountDao, Mockito.times(1))
-				.withDraw(Mockito.any(WithdrawRequestDto.class));
-	}
-
-	private void mockTestWithdrawInvalidAmountException() {
-		Mockito.when(accountDao.withDraw(Mockito.any(WithdrawRequestDto.class)))
-				.thenThrow(new InvalidAmountException());
-	}
-
-	@Test(expected = InvalidAmountException.class)
-	public void testWithdrawInvalidAmountException() {
-		mockTestWithdrawInvalidAmountException();
-		accountDao.withDraw(TestHelper.getWithdrawRequestDto());
-		Mockito.verify(accountDao, Mockito.times(1))
-				.withDraw(Mockito.any(WithdrawRequestDto.class));
-	}
-
-	private void mockTestDeposit() {
-		Mockito.when(accountDao.deposit(Mockito.any(DepositRequest.class)))
-				.thenReturn(TestHelper.getDepositResponse());
+		ResponseDto response = accountService.withdraw(TestHelper.getWithdrawRequestDto());
+		Mockito.verify(accountService, Mockito.times(1))
+				.withdraw(Mockito.any(WithdrawRequestDto.class));
+		assertEquals(response.getStatusType(), StatusType.SUCCESS);
 	}
 
 	@Test
 	public void testDeposit() {
-		DepositResponse response = accountDao.deposit(TestHelper.getDepositRequest());
-		Mockito.verify(accountDao, Mockito.times(1)).deposit(Mockito.any(DepositRequest.class));
-		assertEquals(response.getCurrentAmount(), BigDecimal.valueOf(2000));
-		assertEquals(response.getDepositAmount(), BigDecimal.valueOf(1000));
+		ResponseDto response = accountService.deposit(TestHelper.getDepositRequest());
+		Mockito.verify(accountService, Mockito.times(1)).deposit(Mockito.any(DepositRequest.class));
+		assertEquals(response.getStatusType(), StatusType.SUCCESS);
 	}
 
-	private void mockTestDepositDataNotFoundException() {
-		Mockito.when(accountDao.deposit(Mockito.any(DepositRequest.class)))
-				.thenThrow(new DataNotFoundException());
+	@Test
+	public void testBalance() {
+		ResponseDto response = accountService.balance("1");
+		Mockito.verify(accountService, Mockito.times(1)).balance(Mockito.anyString());
+		assertEquals(response.getStatusType(), StatusType.SUCCESS);
+		assertEquals(response.getData().getAsInt(), 1000);
 	}
 
-	@Test(expected = DataNotFoundException.class)
-	public void testDepositDataNotFoundException() {
-		mockTestDepositDataNotFoundException();
-		accountDao.deposit(TestHelper.getDepositRequest());
-		Mockito.verify(accountDao, Mockito.times(1)).deposit(Mockito.any(DepositRequest.class));
-	}
-
-	private void mockTestDepositInvalidAmountException() {
-		Mockito.when(accountDao.deposit(Mockito.any(DepositRequest.class)))
-				.thenThrow(new InvalidAmountException());
-	}
-
-	@Test(expected = InvalidAmountException.class)
-	public void testDepositInvalidAmountException() {
-		mockTestDepositInvalidAmountException();
-		accountDao.deposit(TestHelper.getDepositRequest());
-		Mockito.verify(accountDao, Mockito.times(1)).deposit(Mockito.any(DepositRequest.class));
-	}
 }
