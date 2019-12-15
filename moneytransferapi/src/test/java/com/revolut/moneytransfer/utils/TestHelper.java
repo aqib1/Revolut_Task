@@ -199,4 +199,16 @@ public class TestHelper {
 		return UserRequestDto.builder().withUser(getTestUser()).build();
 	}
 
+	/**
+	 * @return
+	 */
+	public static UserRequestDto getUserCreationRequestBDD() {
+		return UserRequestDto.builder()
+				.withUser(UserModel.builder().withId("10").withFirstName("revolut")
+						.withLastName("-").withCNIC("1234-12212-11")
+						.withAddress("H# 1, st# 2, budapest").withContactNumber("+32145777789")
+						.withEmail("revolut@gmail.com").build())
+				.build();
+	}
+
 }
