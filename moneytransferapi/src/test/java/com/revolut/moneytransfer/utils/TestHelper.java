@@ -33,6 +33,7 @@ public class TestHelper {
 	public static final String GET_ACCOUNT_BY_ID = "/account/a1";
 	public static final String DELETE_ACCOUNT_BY_ID = "/account/ac12";
 	public static final String OPTION_ACCOUNT_EXIST = "/account/a1";
+	public static final String GET_ACCOUNT_BALANCE = "/account/balance/a2";
 
 	private TestHelper() {
 

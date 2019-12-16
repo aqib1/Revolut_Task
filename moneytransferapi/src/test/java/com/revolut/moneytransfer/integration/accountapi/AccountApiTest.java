@@ -55,8 +55,9 @@ public class AccountApiTest {
 		assertEquals(response.getStatusType(), StatusType.SUCCESS);
 		AccountModel account = Helper.GSON.fromJson(response.getData(), AccountModel.class);
 		assertEquals(account.getId(), "a1");
-		assertEquals(account.getBalance(), BigDecimal.valueOf(5000));
 		assertEquals(account.getAccountTitle(), "account-A");
+		assertEquals(account.getCurrency(), Currency.getInstance("USD"));
+		assertEquals(account.getUserId(), "u1");
 	}
 
 	@Test
@@ -187,4 +188,12 @@ public class AccountApiTest {
 				.post(Helper.POST_WITHDRAW);
 	}
 
+	@Test
+	public void testGetPayment() {
+		ResponseDto response = RestAssured.given().contentType(ContentType.JSON)
+				.request(Method.GET, TestHelper.GET_ACCOUNT_BALANCE).then().statusCode(200)
+				.extract().as(ResponseDto.class);
+		assertEquals(response.getStatusType(), StatusType.SUCCESS);
+		assertEquals(response.getData().getAsBigDecimal(), BigDecimal.valueOf(1500));
+	}
 }
