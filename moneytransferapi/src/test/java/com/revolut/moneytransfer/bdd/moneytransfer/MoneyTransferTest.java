@@ -46,17 +46,8 @@ public class MoneyTransferTest {
 		assertEquals(response.getStatusType(), StatusType.SUCCESS);
 		TransResponseDto transResponse = Helper.GSON.fromJson(response.getData(),
 				TransResponseDto.class);
-		assertEquals(transResponse.getReciever().getId(), "a2");
-		assertEquals(transResponse.getReciever().getAccountTitle(), "account-B");
-		assertEquals(transResponse.getReciever().getCurrency(), Currency.getInstance("USD"));
-		// Amount transfer successfully
-		assertEquals(transResponse.getReciever().getBalance(), BigDecimal.valueOf(2000));
-
-		assertEquals(transResponse.getSender().getId(), "a1");
-		assertEquals(transResponse.getSender().getAccountTitle(), "account-A");
-		assertEquals(transResponse.getSender().getCurrency(), Currency.getInstance("USD"));
-		// Amount detected from sender
-		assertEquals(transResponse.getSender().getBalance(), BigDecimal.valueOf(4500));
+		verifyRecieverAccount(transResponse.getReciever());
+		verifySenderAccount(transResponse.getSender());
 	}
 
 	@Then("amount is deducted from sender account")
@@ -66,6 +57,10 @@ public class MoneyTransferTest {
 				.as(ResponseDto.class);
 		assertEquals(response.getStatusType(), StatusType.SUCCESS);
 		AccountModel account = Helper.GSON.fromJson(response.getData(), AccountModel.class);
+		verifySenderAccount(account);
+	}
+
+	private void verifySenderAccount(AccountModel account) {
 		assertEquals(account.getId(), "a1");
 		assertEquals(account.getAccountTitle(), "account-A");
 		assertEquals(account.getCurrency(), Currency.getInstance("USD"));
@@ -80,6 +75,10 @@ public class MoneyTransferTest {
 				.as(ResponseDto.class);
 		assertEquals(response.getStatusType(), StatusType.SUCCESS);
 		AccountModel account = Helper.GSON.fromJson(response.getData(), AccountModel.class);
+		verifyRecieverAccount(account);
+	}
+
+	private void verifyRecieverAccount(AccountModel account) {
 		assertEquals(account.getId(), "a2");
 		assertEquals(account.getAccountTitle(), "account-B");
 		assertEquals(account.getCurrency(), Currency.getInstance("USD"));
