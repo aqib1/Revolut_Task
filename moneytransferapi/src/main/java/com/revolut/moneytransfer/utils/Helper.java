@@ -48,6 +48,9 @@ public class Helper {
 
 	/****************** Transaction API *******************/
 	public static final String POST_TRANSACTION = "/trans/";
+	
+	/******************* Health API ***********************/
+	public static final String GET_HEALTH = "/health";
 
 	/************ API properties ***********/
 	public static final String RESPONSE_TYPE_JSON = "application/json";

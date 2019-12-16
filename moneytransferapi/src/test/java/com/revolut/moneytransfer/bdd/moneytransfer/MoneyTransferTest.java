@@ -88,6 +88,6 @@ public class MoneyTransferTest {
 
 	@After
 	public void afterTests() {
-		TestHelper.stopSparTestkApp();
+		TestHelper.stopSparkTestApp();
 	}
 }

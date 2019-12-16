@@ -229,7 +229,7 @@ public class TestHelper {
 	/**
 	 * 
 	 */
-	public static void stopSparTestkApp() {
+	public static void stopSparkTestApp() {
 		MoneyTransfer.stopSparkApp();
 	}
 
