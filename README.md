@@ -8,10 +8,20 @@ mvn exec:java
 ### Technologies
 
 * Spark Java (Light weight microservices backend framework with embedded Jetty container)
+* Junit 4 (for unit testing)
 * Cucumber (for acceptance testing of features)
-* Mockito (for mocking database calls in unit testing)
-* Dagger 2 for dependency injection (It is very light dependency 
-injection framework from google like Guice)
+* Mockito (for mocking database calls and methods in unit testing)
+* Dagger 2 (It is very light dependency injection framework from google like Guice)
+* Lombok (for creating getter/setter using annotations)
+* Rest Assured (for Integration testing)
+
+### Design Pattren 
+
+* Double check locking singleton pattren
+* Builder pattren
+
+### Thread safety
+For thread safety, i am using java 1.8 StampedLock, in which we have optimistic read lock. Which make synchronization overhead is very low.
 
 #### Dagger 2
 I have used Dagger to construct services objects and inject databse
@@ -22,18 +32,14 @@ Since Dagger build up dependencies on compile time, it is fast as well
 on runtime to fetch those dependencies.
 
 Application starts a jetty server on localhost port 
-4567.In memory hashmap based data structure initialized
-with some sample user and account data to play around with.
+4567.I am using port method to set port to 8080.Developer can update port according.In memory hashmap based data structure initialized
+with some sample user, account, and transaction data to play around with.
 
 Few example calls are given below.
-* localhost:4567/user/1
-* localhost:4567/user/2
-* localhost:4567/account/1
-* localhost:4567/account/2
-
-#### Money Transfer "POST" request
-
-localhost:4567/moneytransfer?fromAccountId=1&toAccountId=2&amountToTransfer=20
+* localhost:8080/user/u1
+* localhost:8080/user/u2
+* localhost:8080/account/a1
+* localhost:8080/account/a2
 
 ### Testing
 TDD and BDD practice has been followed in developing the API in following
@@ -50,14 +56,17 @@ read by product as they are defined in English and are converted
 into domain language. For example, it can be defined like following
 
 ##### Feature: Money Transfer
-    Scenario: Successful money transfer
-            Given that the user with account id 1 has to transfer 200 Euro to another user having account id 2
-            When the transfer is requested
-            Then amount is deducted from sender's account
-            And receiver receives the amount
+@MoneyTransfer
+Feature: Money Transfer
+
+  Scenario: Successful money transfer
+    Given Transaction request with sender account id, reciever account and amount 
+    When transfer action is called
+    Then amount is deducted from sender account
+    And reciever will recieve amount
 
 #### Rollback transaction
-Since for the sake of this test, the datastore was in memory, i could 
+For the sake of this assignment, and simpicity i am using in memory data, using concurrentHashMap.I could 
 not use transactional features of database with rollback option but in
 real systems for testing, it it necessary to perform tests in transactional
 manner and rollback after running each transaction to persist the data or
@@ -73,17 +82,16 @@ HTTP METHOD | PATH | USAGE
 --- | --- | ---
 GET| /user/all | Get all users
 GET| /user/:id | Get user by its id
-PUT| /user/:id | Create a new user
-POST| /user/:id | Update an existing user
-DELETE| /user/:id | Delete an exisiting user
+POST| /user/ | Create a new user
+PUT| /user/:id | Update an existing user
+DELETE| /user/:id | Delete an exisiting user by its id
+OPTION| /user/:id | Check user exists by its id
 GET| /account/all | Get all accounts
 GET| /account/:id | Get account details by id
-GET| /account/:id/balance | Get account balance by accountId
-PUT| /account/:id | Create a new account
-DELETE| /account/:id | Remove account by accountId
-PUT| /account/:id/withdraw/:amount | Withdraw money from account
-PUT| /account/:id/deposit/:amount | Deposit money from account
-POST| /moneytransfer | Perform transaction between 2 user accounts
+POST| /account/ | Create new account
+DELETE| /account/:id | Delete an exisiting account by its id
+PUT| /account/:id | Update an existing account
+OPTION| /account/:id | Check account exists by its id
 
 #### Sample JSON for User and Account
 
