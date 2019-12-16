@@ -31,6 +31,8 @@ public class TestHelper {
 	public static final String OPTION_USER_EXIST = "/user/u1";
 	public static final String DELETE_USER_BY_ID = "/user/u4";
 	public static final String GET_ACCOUNT_BY_ID = "/account/a1";
+	public static final String DELETE_ACCOUNT_BY_ID = "/account/ac12";
+	public static final String OPTION_ACCOUNT_EXIST = "/account/a1";
 
 	private TestHelper() {
 
@@ -240,13 +242,42 @@ public class TestHelper {
 						.withId("u1").build())
 				.build();
 	}
-	
+
 	public static UserRequestDto getUserCreateRequest() {
 		return UserRequestDto.builder()
 				.withUser(UserModel.builder().withAddress("H#1, ST#12, budapest")
 						.withCNIC("12455-65554-8888").withContactNumber("+97441788896")
 						.withEmail("u4@gmail.com").withFirstName("ERAR").withLastName("UIPPL")
 						.withId("u4").build())
+				.build();
+	}
+
+	/**
+	 * @return
+	 */
+	public static AccountRequestDto getAccountRequestForCreate() {
+		return AccountRequestDto.builder()
+				.withAccount(AccountModel.builder().withAccountTitle("Test-Account1")
+						.withBalance(BigDecimal.valueOf(10000)).withId("ac12").withUserId("u1")
+						.withCurrency(Currency.getInstance("USD")).build())
+				.build();
+	}
+
+	public static AccountRequestDto getAccountRequestForUpdate() {
+		return AccountRequestDto.builder()
+				.withAccount(AccountModel.builder().withId("a11").withAccountTitle("account-Z")
+						.withBalance(BigDecimal.valueOf(100))
+						.withCurrency(Currency.getInstance("PKR")).withUserId("u11").build())
+				.build();
+	}
+
+	public static WithdrawRequestDto getWithDrawRequest() {
+		return WithdrawRequestDto.builder().withAccountId("a11").withAmount(BigDecimal.valueOf(500))
+				.build();
+	}
+
+	public static DepositRequest getDepositRequestForA11() {
+		return DepositRequest.builder().withAccountId("a11").withAmount(BigDecimal.valueOf(500))
 				.build();
 	}
 

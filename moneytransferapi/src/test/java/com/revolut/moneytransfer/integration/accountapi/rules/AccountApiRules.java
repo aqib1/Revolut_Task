@@ -25,7 +25,7 @@ public class AccountApiRules {
 
 	}
 
-	public static void userApiRules(Service http, AccountService accountService) {
+	public static void accountApiRules(Service http, AccountService accountService) {
 		http.port(Helper.PORT_8080);
 		http.before((request, response) -> {
 			response.type(Helper.RESPONSE_TYPE_JSON);
