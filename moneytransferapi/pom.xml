@@ -121,7 +121,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<mainClass>MoneyTransfer</mainClass>
+					<mainClass>com.revolut.moneytransfer.MoneyTransfer</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>
