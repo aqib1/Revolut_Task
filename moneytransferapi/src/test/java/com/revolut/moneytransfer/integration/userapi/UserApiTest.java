@@ -39,7 +39,7 @@ public class UserApiTest {
 	});
 
 	@Before
-	public void before() throws InterruptedException {
+	public void before() {
 		RestAssured.baseURI = Helper.BASE_URL;
 	}
 

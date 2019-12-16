@@ -30,6 +30,7 @@ public class TestHelper {
 	public static final String GET_USER_BY_ID_TEST = "/user/u3";
 	public static final String OPTION_USER_EXIST = "/user/u1";
 	public static final String DELETE_USER_BY_ID = "/user/u4";
+	public static final String GET_ACCOUNT_BY_ID = "/account/a1";
 
 	private TestHelper() {
 
