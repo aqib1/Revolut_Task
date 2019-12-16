@@ -28,8 +28,8 @@ import lombok.ToString;
 public class DataUtils {
 	// make it volatile to avoid thread cached visibility issues
 	private static volatile DataUtils dataUtils = null;
-	private Map<String, UserModel> userData = new ConcurrentHashMap<>();
-	private Map<String, AccountModel> accountData = new ConcurrentHashMap<>();
+	private volatile Map<String, UserModel> userData = new ConcurrentHashMap<>();
+	private volatile Map<String, AccountModel> accountData = new ConcurrentHashMap<>();
 
 	private DataUtils() {
 		initUserData();
@@ -49,13 +49,13 @@ public class DataUtils {
 						.withContactNumber("+3647988852").withEmail("u3@gmail.com")
 						.withFirstName("REMO").withLastName("PPM").withId("u3").build());
 		accountData.put("a1",
-				AccountModel.builder().withAccountTitle("a1").withBalance(BigDecimal.valueOf(1000))
+				AccountModel.builder().withId("a1").withAccountTitle("account-A").withBalance(BigDecimal.valueOf(5000))
 						.withCurrency(Currency.getInstance("USD")).withUserId("u1").build());
 		accountData.put("a2",
-				AccountModel.builder().withAccountTitle("a2").withBalance(BigDecimal.valueOf(1500))
+				AccountModel.builder().withId("a2").withAccountTitle("account-B").withBalance(BigDecimal.valueOf(1500))
 						.withCurrency(Currency.getInstance("USD")).withUserId("u2").build());
 		accountData.put("a3",
-				AccountModel.builder().withAccountTitle("a3").withBalance(BigDecimal.valueOf(500))
+				AccountModel.builder().withId("a3").withAccountTitle("account-C").withBalance(BigDecimal.valueOf(500))
 						.withCurrency(Currency.getInstance("USD")).withUserId("u3").build());
 	}
 

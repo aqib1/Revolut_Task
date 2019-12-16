@@ -23,6 +23,8 @@ import com.revolut.moneytransfer.exception.InvalidRequestException;
 public class Helper {
 
 	public static final Gson GSON = new Gson();
+	
+	public static final String BASE_URL="http://localhost:8080";
 	/**************** User API ***********/
 	private static final String USER_API = "/user";
 	public static final String GET_USERS = USER_API + "/all";

@@ -18,6 +18,8 @@ import com.revolut.moneytransfer.exception.InvalidRequestException;
 import com.revolut.moneytransfer.exceptionadvice.ExceptionAdvice;
 import com.revolut.moneytransfer.utils.ExceptionUtility;
 
+import spark.Spark;
+
 /**
  * <p>
  * This class is used to initialize spark-java application against all
@@ -135,6 +137,14 @@ public class SparkApp {
 	 */
 	public SparkApp setPort(int port) {
 		port(port);
+		return this;
+	}
+
+	/**
+	 * @return {@link SparkApp}
+	 */
+	public SparkApp stop() {
+		Spark.stop();
 		return this;
 	}
 

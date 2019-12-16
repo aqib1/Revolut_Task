@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Currency;
+import java.util.concurrent.TimeUnit;
 
+import com.revolut.moneytransfer.MoneyTransfer;
 import com.revolut.moneytransfer.dto.requests.AccountRequestDto;
 import com.revolut.moneytransfer.dto.requests.DepositRequest;
 import com.revolut.moneytransfer.dto.requests.TransRequestDto;
@@ -209,6 +211,26 @@ public class TestHelper {
 						.withAddress("H# 1, st# 2, budapest").withContactNumber("+32145777789")
 						.withEmail("revolut@gmail.com").build())
 				.build();
+	}
+
+	/**
+	 * @throws InterruptedException
+	 */
+	public static void startSparkTestApp() throws InterruptedException {
+		MoneyTransfer.main(null);
+		TimeUnit.SECONDS.sleep(1);
+	}
+	
+	public static TransRequestDto getTransRequestForBDD() {
+		return TransRequestDto.builder().withAmount(BigDecimal.valueOf(500)).withFromAccount("a1")
+				.withToAccount("a2").build();
+	}
+
+	/**
+	 * 
+	 */
+	public static void stopSparTestkApp() {
+		MoneyTransfer.stopSparkApp();
 	}
 
 }

@@ -1,7 +1,7 @@
 package com.revolut.moneytransfer.controller;
 
 import static com.revolut.moneytransfer.utils.Helper.POST_TRANSACTION;
-import static spark.Spark.get;
+import static spark.Spark.post;
 
 import java.util.Objects;
 
@@ -39,7 +39,7 @@ public class TransactionController {
 	 * @return {@link AccountController}
 	 */
 	public TransactionController registerTransactionAPI() {
-		get(POST_TRANSACTION, (request, response) -> {
+		post(POST_TRANSACTION, (request, response) -> {
 			return Helper.getJson(transService
 					.transfer(new Gson().fromJson(request.body(), TransRequestDto.class)));
 		});

@@ -1,6 +1,7 @@
 package com.revolut.moneytransfer.dao.trans.Impl;
 
 import java.math.BigDecimal;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.locks.StampedLock;
 
@@ -68,6 +69,7 @@ public class TransDaoImpl implements TransDao {
 		try {
 			AccountModel sender = getAccount(request.getFromAccount());
 			AccountModel reciever = getAccount(request.getToAccount());
+
 			if (request.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
 				throw new InvalidAmountException(
 						"Invalid amount, negative or zero value not acceptable");
@@ -85,9 +87,10 @@ public class TransDaoImpl implements TransDao {
 		}
 	}
 
-	private AccountModel getAccount(final String fromAccount) throws DataNotFoundException {
-		return DataUtils.getInstance().getAccountData().values().stream()
-				.filter(x -> x.getId().equals(fromAccount)).findAny()
+	private AccountModel getAccount(final String fromAccount)
+			throws DataNotFoundException, NullPointerException {
+		Map<String, AccountModel> map = DataUtils.getInstance().getAccountData();
+		return map.values().stream().filter(x -> x.getId().equals(fromAccount)).findAny()
 				.orElseThrow(() -> new DataNotFoundException(
 						"Account not found against id[" + fromAccount + "]"));
 	}

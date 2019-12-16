@@ -1,3 +1,4 @@
+package com.revolut.moneytransfer;
 
 import java.lang.reflect.Method;
 
