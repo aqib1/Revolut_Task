@@ -26,6 +26,11 @@ import com.revolut.moneytransfer.models.UserModel;
  * @version 1.0
  */
 public class TestHelper {
+
+	public static final String GET_USER_BY_ID_TEST = "/user/u3";
+	public static final String OPTION_USER_EXIST = "/user/u1";
+	public static final String DELETE_USER_BY_ID = "/user/u4";
+
 	private TestHelper() {
 
 	}
@@ -220,10 +225,28 @@ public class TestHelper {
 		MoneyTransfer.main(null);
 		TimeUnit.SECONDS.sleep(1);
 	}
-	
+
 	public static TransRequestDto getTransRequestForBDD() {
 		return TransRequestDto.builder().withAmount(BigDecimal.valueOf(500)).withFromAccount("a1")
 				.withToAccount("a2").build();
+	}
+
+	public static UserRequestDto getUserUpadteRequest() {
+		return UserRequestDto.builder()
+				.withUser(UserModel.builder().withAddress("H#1, ST#2, budapest")
+						.withCNIC("1231-211-2111").withContactNumber("+93654559990")
+						.withEmail("u1@gmail.com").withFirstName("USER").withLastName("Temp")
+						.withId("u1").build())
+				.build();
+	}
+	
+	public static UserRequestDto getUserCreateRequest() {
+		return UserRequestDto.builder()
+				.withUser(UserModel.builder().withAddress("H#1, ST#12, budapest")
+						.withCNIC("12455-65554-8888").withContactNumber("+97441788896")
+						.withEmail("u4@gmail.com").withFirstName("ERAR").withLastName("UIPPL")
+						.withId("u4").build())
+				.build();
 	}
 
 	/**

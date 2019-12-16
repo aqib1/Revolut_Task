@@ -33,7 +33,8 @@ public class Helper {
 	public static final String DELETE_USER_BY_ID = USER_API + "/:id";
 	public static final String PUT_USER_UPDATE = USER_API + "/";
 	public static final String OPTION_USER_EXIST = USER_API + "/:id";
-
+	
+	
 	/******************* Account API ***********************/
 	private static final String ACCOUNT_API = "/account";
 	public static final String GET_ACCOUNTS = ACCOUNT_API + "/all";

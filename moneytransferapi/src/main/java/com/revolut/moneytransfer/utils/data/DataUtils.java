@@ -57,6 +57,9 @@ public class DataUtils {
 		accountData.put("a3",
 				AccountModel.builder().withId("a3").withAccountTitle("account-C").withBalance(BigDecimal.valueOf(500))
 						.withCurrency(Currency.getInstance("USD")).withUserId("u3").build());
+		accountData.put("a11",
+				AccountModel.builder().withId("a11").withAccountTitle("account-Z").withBalance(BigDecimal.valueOf(100))
+						.withCurrency(Currency.getInstance("PKR")).withUserId("u11").build());
 	}
 
 	public static DataUtils getInstance() {

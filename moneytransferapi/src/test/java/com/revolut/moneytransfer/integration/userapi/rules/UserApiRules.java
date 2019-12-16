@@ -23,6 +23,9 @@ public class UserApiRules {
 
 	public static void userApiRules(Service http, UserService userService) {
 		http.port(Helper.PORT_8080);
+		http.before((request, response) -> {
+			response.type(Helper.RESPONSE_TYPE_JSON);
+		});
 		http.get(GET_USERS, (request, response) -> {
 			return Helper.getJson(userService.getAll());
 		});

@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import com.revolut.moneytransfer.integration.sparkserver.rules.SparkServerRules;
 import com.revolut.moneytransfer.sparkapprule.SparkServerRule;
 import com.revolut.moneytransfer.utils.Helper;
 
@@ -15,11 +16,9 @@ public class SparkServerTest {
 
 	@Rule
 	public final SparkServerRule SPARK_SERVER = new SparkServerRule(http -> {
-		http.port(Helper.PORT_8080);
-		http.get("/health", (request, response) -> "healthy");
-
+		SparkServerRules.sparkServerRules(http);
 	});
-	
+
 	@Before
 	public void before() throws InterruptedException {
 		RestAssured.baseURI = Helper.BASE_URL;
