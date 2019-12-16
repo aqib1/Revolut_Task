@@ -92,6 +92,16 @@ POST| /account/ | Create new account
 DELETE| /account/:id | Delete an exisiting account by its id
 PUT| /account/:id | Update an existing account
 OPTION| /account/:id | Check account exists by its id
+POST| /account/withdraw/ | Withdraw amount from account
+POST| /account/deposit/ | deposit amount from account
+GET| /account/balance/:id | get amount from account by account id
+POST| /trans/ | transaction between two accounts
+GET| /health | Check health of spark server
+
+### Sample Request objects
+
+### User Create/Update
+
 
 #### Sample JSON for User and Account
 
