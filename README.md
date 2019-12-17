@@ -138,7 +138,43 @@ Sample requesta and response objects
                         }
         }
         
-        
+ 
+### Sample Response objects
+Sample requesta and response objects
+
+##### Sample JSON for User Create/Update response
+	{
+    		"statusType": "SUCCESS",
+    		"data": {
+        		"id": "23211",
+        		"firstName": "Ali",
+        		"lastName": "Javed",
+        		"email": "test@gmail.com",
+        		"CNIC": "weqjh1k2378172",
+        		"address": "test12323",
+        		"contactNumber": "+262711"
+    			},
+    		"message": "User for ID [23211] created successfully"
+	}
+
+##### Sample JSON for Account Create/Update response
+	{
+    		"statusType": "SUCCESS",
+    		"data": {
+        		"id": "23122",
+        		"accountTitle": "TEMP2",
+        		"balance": 8310,
+        		"currency": "EUR",
+        		"userId": "23211"
+    			},
+    		"message": "Account for ID [23122] created successfully"
+	}
+
+### Sample Error response
+	{
+    		"statusType": "ERROR",
+    		"message": "User already exists against id [23211]"
+	}
 
 ### Https Status
 * 200 OK: The request has succeeded
