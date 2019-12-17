@@ -99,41 +99,43 @@ POST| /trans/ | transaction between two accounts
 GET| /health | Check health of spark server
 
 ### Sample Request objects
+Sample requesta and response objects
 
-### User Create/Update
-
-
-#### Sample JSON for User and Account
-
-##### User
+##### Sample JSON for User Create/Update request
         {
-           "id": "1",
-           "firstName": "foo",
-           "lastName": "bar",
-           "email": "foo@bar.com"
+           "user" : {
+	                    "id":"23211",
+	                    "address":"test12323",
+  	                  "CNIC":"weqjh1k2378172",
+	                    "email":"test@gmail.com",
+	                    "firstName":"Ali",
+	                    "contactNumber":"+262711",
+	                    "lastName":"Javed"
+	
+                     }
+        }
+        {
+           "user" : {
+	                    "id":"23222",
+	                    "address":"wqsgq123",
+  	                  "CNIC":"123-7895-9996-9",
+	                    "email":"lemp@gmail.com",
+	                    "firstName":"Levo",
+	                    "contactNumber":"+964623",
+	                    "lastName":"Iop"
+	
+                     }
         }
         
-        {
-           "id": "2",
-           "firstName": "anotherfoo",
-           "lastName": "anotherbar",
-           "email": "anotherfoo@anotherbar.com"
-        }
-       
-
-##### Account
-        {
-            "accountID": "1",
-            "userId": "1",
-            "balance": 1000,
-            "currency": "EUR"
-        }
-        
-        {
-            "accountID": "2",
-            "userId": "2000",
-            "balance": 20,
-            "currency": "EUR"
+##### Sample JSON for Account Create/Update request
+        { 
+           "account" : {
+                        "id": "23122",
+                        "accountTitle": "TEMP2",
+                        "balance": 8310,
+                        "currency": "EUR",
+                        "userId": "23211"
+                        }
         }
         
         
