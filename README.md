@@ -56,14 +56,14 @@ read by product as they are defined in English and are converted
 into domain language. For example, it can be defined like following
 
 ##### Feature: Money Transfer
-@MoneyTransfer
-Feature: Money Transfer
+	@MoneyTransfer
+		Feature: Money Transfer
 
-  Scenario: Successful money transfer
-    Given Transaction request with sender account id, reciever account and amount 
-    When transfer action is called
-    Then amount is deducted from sender account
-    And reciever will recieve amount
+  		Scenario: Successful money transfer
+    		Given Transaction request with sender account id, reciever account and amount 
+   		When transfer action is called
+    		Then amount is deducted from sender account
+    		And reciever will recieve amount
 
 #### Rollback transaction
 For the sake of this assignment, and simpicity i am using in memory data, using concurrentHashMap.I could 
