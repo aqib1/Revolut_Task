@@ -177,7 +177,7 @@ Sample requests and response objects
     		"message": "Account for ID [23122] created successfully"
 	}
 
-### Sample Error response
+#### Sample Error response
 	{
     		"statusType": "ERROR",
     		"message": "User already exists against id [23211]"
