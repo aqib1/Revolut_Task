@@ -176,9 +176,42 @@ Sample requesta and response objects
     		"message": "User already exists against id [23211]"
 	}
 
+
+##### Sample JSON for Transaction request
+
+	{
+		"fromAccount":"23122",
+		"toAccount":"23ww122",
+		"amount":310
+	}
+	
+
+##### Sample JSON for Transaction response
+	{
+    		"statusType": "SUCCESS",
+    		"data": {
+        	"reciever": {
+            		"id": "23ww122",
+            		"accountTitle": "TEMP2",
+            		"balance": 620,
+            		"currency": "EUR",
+            		"userId": "231111"
+        		},
+        	"sender": {
+            		"id": "23122",
+            		"accountTitle": "TEMP2",
+            		"balance": 8000,
+            		"currency": "EUR",
+            		"userId": "23211"
+        		}
+    		},
+    		"message": "Amount transfer successfully"
+	}
+	
+
 ### Https Status
 * 200 OK: The request has succeeded
 * 400 Bad Request: The request could not be understood by the server
 * 404 Not Found: The requested resource cannot be found
+* 417 Bad Exception: Internal server exception
 * 500 Internal Server Error: The server encountered an unexpected condition 
-
