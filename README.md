@@ -137,10 +137,17 @@ Sample requesta and response objects
                         "userId": "23211"
                         }
         }
-        
+	
+##### Sample JSON for Transaction request
+
+	{
+		"fromAccount":"23122",
+		"toAccount":"23ww122",
+		"amount":310
+	}        
  
 ### Sample Response objects
-Sample requesta and response objects
+Sample requests and response objects
 
 ##### Sample JSON for User Create/Update response
 	{
@@ -174,15 +181,6 @@ Sample requesta and response objects
 	{
     		"statusType": "ERROR",
     		"message": "User already exists against id [23211]"
-	}
-
-
-##### Sample JSON for Transaction request
-
-	{
-		"fromAccount":"23122",
-		"toAccount":"23ww122",
-		"amount":310
 	}
 	
 
