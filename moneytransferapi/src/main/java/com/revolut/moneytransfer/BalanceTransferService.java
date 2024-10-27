@@ -1,4 +1,4 @@
-package com.revolut.io;
+package com.revolut.moneytransfer;
 
 import java.math.BigDecimal;
 import java.util.concurrent.atomic.AtomicReference;
